@@ -1,0 +1,11 @@
+@mixin no-scrollbar() {
+    &::-webkit-scrollbar {
+        width: 0;
+    }
+}
+
+@mixin blank-list() {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}

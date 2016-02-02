@@ -1,0 +1,34 @@
+.mobile-sim-container {
+  margin: 0 auto;
+  position: relative;
+  border: 4px solid #000;
+  border-radius: 4px;
+  padding: 0;
+  background: #000;
+  box-shadow: 0 10px 70px rgba(5, 5, 5, 0.26);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-top: 20px; }
+  .mobile-sim-container::-webkit-scrollbar {
+    width: 0; }
+  .mobile-sim-container.ratio-16-9 {
+    width: 320px;
+    height: 569px; }
+  .mobile-sim-container .mock-device-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000;
+    height: 20px;
+    width: 100%;
+    text-align: right;
+    z-index: 999;
+    box-sizing: border-box; }
+    .mobile-sim-container .mock-device-nav span,
+    .mobile-sim-container .mock-device-nav i {
+      color: #fff;
+      font-size: 12px;
+      margin-right: 4px; }
+    .mobile-sim-container .mock-device-nav .nav-text {
+      font-weight: bold;
+      font-family: consolas, monospace; }

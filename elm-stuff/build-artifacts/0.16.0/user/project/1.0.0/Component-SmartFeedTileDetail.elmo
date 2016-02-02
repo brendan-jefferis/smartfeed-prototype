@@ -1,0 +1,102 @@
+Elm.Component = Elm.Component || {};
+Elm.Component.SmartFeedTileDetail = Elm.Component.SmartFeedTileDetail || {};
+Elm.Component.SmartFeedTileDetail.make = function (_elm) {
+   "use strict";
+   _elm.Component = _elm.Component || {};
+   _elm.Component.SmartFeedTileDetail = _elm.Component.SmartFeedTileDetail || {};
+   if (_elm.Component.SmartFeedTileDetail.values)
+   return _elm.Component.SmartFeedTileDetail.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Component$Product = Elm.Component.Product.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var filterView = F2(function (address,model) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("filter-container")]),
+      _U.list([A2($Html.span,
+              _U.list([$Html$Attributes.$class("filter-title")]),
+              _U.list([$Html.text("Show me more like this...")]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("action-row")]),
+              _U.list([A2($Html.button,
+                      _U.list([]),
+                      _U.list([$Html.text("Colour")]))
+                      ,A2($Html.button,_U.list([]),_U.list([$Html.text("Materials")]))
+                      ,A2($Html.button,_U.list([]),_U.list([$Html.text("Product")]))
+                      ,A2($Html.button,
+                      _U.list([]),
+                      _U.list([$Html.text("Style")]))]))]));
+   });
+   var productView = F2(function (address,product) {
+      return A2($Html.li,
+      _U.list([$Html$Attributes.$class("product-list-item")]),
+      _U.list([A2($Html.div,
+              _U.list([$Html$Attributes.$class("thumbnail-container")]),
+              _U.list([A2($Html.img,
+              _U.list([$Html$Attributes.$class("thumbnail")
+                      ,$Html$Attributes.src(product.thumbnailUrl)]),
+              _U.list([]))]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("title-container")]),
+              _U.list([A2($Html.p,
+                      _U.list([$Html$Attributes.$class("title")]),
+                      _U.list([$Html.text(product.title)]))
+                      ,A2($Html.p,
+                      _U.list([$Html$Attributes.$class("price")]),
+                      _U.list([$Html.text(A2($Basics._op["++"],
+                      "$",
+                      $Basics.toString(product.price)))]))]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("actions-container")]),
+              _U.list([A2($Html.i,
+                      _U.list([$Html$Attributes.$class("fa fa-heart-o")]),
+                      _U.list([]))
+                      ,A2($Html.i,
+                      _U.list([$Html$Attributes.$class("fa fa-cart-plus")]),
+                      _U.list([]))
+                      ,A2($Html.i,
+                      _U.list([$Html$Attributes.$class("fa fa-info-circle")]),
+                      _U.list([]))]))]));
+   });
+   var view = F2(function (address,model) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("tile-detail-contents")]),
+      _U.list([A2($Html.ul,
+              _U.list([$Html$Attributes.$class("product-list")]),
+              A2($List.map,productView(address),model.products))
+              ,A2(filterView,address,model)]));
+   });
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      return model;
+   });
+   var NoOp = {ctor: "NoOp"};
+   var actions = $Signal.mailbox(NoOp);
+   var init = function (products) {
+      return {products: products};
+   };
+   var model = function (products) {
+      return A3($Signal.foldp,
+      update,
+      init(products),
+      actions.signal);
+   };
+   var Model = function (a) {    return {products: a};};
+   return _elm.Component.SmartFeedTileDetail.values = {_op: _op
+                                                      ,Model: Model
+                                                      ,init: init
+                                                      ,NoOp: NoOp
+                                                      ,update: update
+                                                      ,productView: productView
+                                                      ,filterView: filterView
+                                                      ,view: view
+                                                      ,actions: actions
+                                                      ,model: model};
+};

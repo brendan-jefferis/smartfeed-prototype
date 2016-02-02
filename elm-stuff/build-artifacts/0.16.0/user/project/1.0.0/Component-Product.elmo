@@ -1,0 +1,28 @@
+Elm.Component = Elm.Component || {};
+Elm.Component.Product = Elm.Component.Product || {};
+Elm.Component.Product.make = function (_elm) {
+   "use strict";
+   _elm.Component = _elm.Component || {};
+   _elm.Component.Product = _elm.Component.Product || {};
+   if (_elm.Component.Product.values)
+   return _elm.Component.Product.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var Model = F8(function (a,b,c,d,e,f,g,h) {
+      return {title: a
+             ,description: b
+             ,price: c
+             ,isFavourite: d
+             ,isInCart: e
+             ,photoUrl: f
+             ,thumbnailUrl: g
+             ,url: h};
+   });
+   return _elm.Component.Product.values = {_op: _op,Model: Model};
+};

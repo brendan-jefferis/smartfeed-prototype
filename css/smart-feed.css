@@ -1,0 +1,117 @@
+.smart-feed {
+  height: 100%;
+  overflow: hidden;
+  position: relative; }
+  .smart-feed div {
+    box-sizing: border-box; }
+  .smart-feed .btn-light {
+    background: #f3f3f3;
+    color: #444; }
+  .smart-feed .photo-container {
+    width: 100%; }
+    .smart-feed .photo-container img {
+      max-width: 100%;
+      max-height: 100%; }
+  .smart-feed .scrollable-list {
+    height: 100%;
+    overflow: auto;
+    background: #444;
+    padding: 8px; }
+    .smart-feed .scrollable-list::-webkit-scrollbar {
+      width: 0; }
+  .smart-feed .tile-list {
+    margin: 0;
+    padding: 0;
+    list-style: none; }
+    .smart-feed .tile-list .tile {
+      width: 304px;
+      background: #f3f3f3;
+      border-radius: 2px;
+      margin-bottom: 16px; }
+      .smart-feed .tile-list .tile .tile-contents .header-row {
+        padding: 8px;
+        height: 36px; }
+        .smart-feed .tile-list .tile .tile-contents .header-row .logo-container {
+          display: inline-block;
+          height: 16px;
+          margin-right: 8px; }
+          .smart-feed .tile-list .tile .tile-contents .header-row .logo-container img {
+            max-height: 100%;
+            max-width: 100%; }
+        .smart-feed .tile-list .tile .tile-contents .header-row .brand-name {
+          font-size: 11px;
+          font-weight: bold;
+          color: #444;
+          line-height: 11px;
+          vertical-align: middle; }
+      .smart-feed .tile-list .tile .tile-contents .footer-row {
+        padding: 8px; }
+        .smart-feed .tile-list .tile .tile-contents .footer-row span {
+          color: #444;
+          font-size: 14px;
+          line-height: 16px; }
+        .smart-feed .tile-list .tile .tile-contents .footer-row .actions {
+          float: right; }
+          .smart-feed .tile-list .tile .tile-contents .footer-row .actions i {
+            font-size: 18px;
+            color: #999;
+            margin-left: 16px; }
+  .smart-feed .tile-detail {
+    height: 100%;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #f3f3f3;
+    height: 100%;
+    width: 100%; }
+    .smart-feed .tile-detail::-webkit-scrollbar {
+      width: 0; }
+    .smart-feed .tile-detail .nav-bar {
+      padding: 8px;
+      background: #414141; }
+    .smart-feed .tile-detail .tile-detail-contents .product-list {
+      margin: 0;
+      padding: 0;
+      list-style: none; }
+      .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item {
+        border-bottom: 1px solid #ccc; }
+        .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item .thumbnail-container,
+        .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item .title-container,
+        .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item .actions-container {
+          display: inline-block;
+          vertical-align: middle;
+          height: 72px; }
+        .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item .thumbnail-container {
+          width: 72px; }
+          .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item .thumbnail-container img {
+            max-height: 100%;
+            max-width: 100%; }
+        .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item .title-container {
+          padding: 0 8px; }
+          .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item .title-container .title {
+            font-size: 14px;
+            margin-bottom: 0;
+            font-weight: bold;
+            color: #555; }
+          .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item .title-container .price {
+            margin-top: 4px;
+            font-size: 14px; }
+        .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item .actions-container {
+          float: right; }
+          .smart-feed .tile-detail .tile-detail-contents .product-list .product-list-item .actions-container i {
+            font-size: 18px;
+            color: #999;
+            margin: 27px 16px 0 0; }
+    .smart-feed .tile-detail .tile-detail-contents .filter-container {
+      padding: 16px 8px 8px; }
+      .smart-feed .tile-detail .tile-detail-contents .filter-container .filter-title {
+        font-weight: bold;
+        color: #444; }
+      .smart-feed .tile-detail .tile-detail-contents .filter-container .action-row {
+        margin-top: 4px; }
+        .smart-feed .tile-detail .tile-detail-contents .filter-container .action-row button {
+          padding: 0;
+          width: 70px; }
+          .smart-feed .tile-detail .tile-detail-contents .filter-container .action-row button:not(:first-of-type) {
+            margin-left: 8px; }
