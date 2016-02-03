@@ -11404,6 +11404,227 @@ Elm.StartApp.Simple.make = function (_elm) {
                                         ,start: start};
 };
 Elm.Component = Elm.Component || {};
+Elm.Component.ColourFilter = Elm.Component.ColourFilter || {};
+Elm.Component.ColourFilter.make = function (_elm) {
+   "use strict";
+   _elm.Component = _elm.Component || {};
+   _elm.Component.ColourFilter = _elm.Component.ColourFilter || {};
+   if (_elm.Component.ColourFilter.values)
+   return _elm.Component.ColourFilter.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "NoOp": return model;
+         case "SelectColour": var _p1 = _p0._0;
+           var selectedPalette = model.selectedPalette;
+           var updatedPalette = A2($List.member,
+           _p1,
+           model.selectedPalette.colours) ? selectedPalette : _U.update(selectedPalette,
+           {colours: A2($List._op["::"],
+           _p1,
+           model.selectedPalette.colours)});
+           return _U.update(model,{selectedPalette: updatedPalette});
+         case "DeselectColor":
+         var selectedPalette = model.selectedPalette;
+           var updatedPalette = _U.update(selectedPalette,
+           {colours: A2($List.filter,
+           function (c) {
+              return !_U.eq(c,_p0._0);
+           },
+           selectedPalette.colours)});
+           return _U.update(model,{selectedPalette: updatedPalette});
+         default: return _U.update(model,
+           {selectedPalette: {name: $Maybe.Nothing
+                             ,colours: _U.list([])}});}
+   });
+   var ClearSelectedPalette = {ctor: "ClearSelectedPalette"};
+   var DeselectColor = function (a) {
+      return {ctor: "DeselectColor",_0: a};
+   };
+   var SelectColour = function (a) {
+      return {ctor: "SelectColour",_0: a};
+   };
+   var colourCell = F4(function (address,
+   count,
+   selectedPalette,
+   paletteColour) {
+      var isSelected = A2($List.member,
+      paletteColour,
+      selectedPalette);
+      var selectedClass = isSelected ? "selected" : "";
+      var clickAction = isSelected ? DeselectColor : SelectColour;
+      var cellWidth = A2($Basics._op["++"],
+      $Basics.toString(100 / $Basics.toFloat(count)),
+      "%");
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class(A2($Basics._op["++"],
+              "colour-cell ",
+              selectedClass))
+              ,$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
+                                               ,_0: "background-color"
+                                               ,_1: paletteColour.hex}
+                                              ,{ctor: "_Tuple2",_0: "width",_1: cellWidth}]))
+              ,$Html$Attributes.title(paletteColour.name)
+              ,A2($Html$Events.onClick,address,clickAction(paletteColour))]),
+      _U.list([]));
+   });
+   var paletteList = F3(function (address,
+   selectedPalette,
+   palette) {
+      var title = function () {
+         var _p2 = palette.name;
+         if (_p2.ctor === "Just") {
+               return _p2._0;
+            } else {
+               return "";
+            }
+      }();
+      var paletteCellCount = $List.length(palette.colours);
+      return A2($Html.li,
+      _U.list([]),
+      _U.list([A2($Html.h6,
+              _U.list([$Html$Attributes.$class("subheader")]),
+              _U.list([$Html.text(title)]))
+              ,A2($Html.ul,
+              _U.list([$Html$Attributes.$class("blank colour-palette")]),
+              A2($List.map,
+              A3(colourCell,address,paletteCellCount,selectedPalette.colours),
+              palette.colours))]));
+   });
+   var view = F2(function (address,model) {
+      var selectedPaletteCellCount = $List.length(model.selectedPalette.colours);
+      var featuredPaletteCellCount = $List.length(model.featuredPalette.colours);
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("filter-panel colour-filter")]),
+      _U.list([_U.cmp(selectedPaletteCellCount,0) > 0 ? A2($Html.div,
+              _U.list([]),
+              _U.list([A2($Html.h6,
+                      _U.list([$Html$Attributes.$class("subheader")]),
+                      _U.list([$Html.text("Your current palette")]))
+                      ,A2($Html.ul,
+                      _U.list([$Html$Attributes.$class("blank colour-palette")]),
+                      A2($List.map,
+                      A3(colourCell,
+                      address,
+                      selectedPaletteCellCount,
+                      model.selectedPalette.colours),
+                      model.selectedPalette.colours))
+                      ,A2($Html.button,
+                      _U.list([$Html$Attributes.$class("btn-small secondary")
+                              ,A2($Html$Events.onClick,address,ClearSelectedPalette)]),
+                      _U.list([$Html.text("Clear all")]))])) : A2($Html.div,
+              _U.list([]),
+              _U.list([]))
+              ,A2($Html.h6,
+              _U.list([$Html$Attributes.$class("subheader")]),
+              _U.list([$Html.text("Colours found in this look")]))
+              ,A2($Html.ul,
+              _U.list([$Html$Attributes.$class("blank colour-palette")]),
+              A2($List.map,
+              A3(colourCell,
+              address,
+              featuredPaletteCellCount,
+              model.selectedPalette.colours),
+              model.featuredPalette.colours))
+              ,A2($Html.h6,
+              _U.list([$Html$Attributes.$class("subheader with-divider")]),
+              _U.list([$Html.text("Other palettes")]))
+              ,A2($Html.ul,
+              _U.list([$Html$Attributes.$class("blank")]),
+              A2($List.map,
+              A2(paletteList,address,model.selectedPalette),
+              model.otherPalettes))]));
+   });
+   var NoOp = {ctor: "NoOp"};
+   var Model = F3(function (a,b,c) {
+      return {featuredPalette: a
+             ,otherPalettes: b
+             ,selectedPalette: c};
+   });
+   var Palette = F2(function (a,b) {
+      return {name: a,colours: b};
+   });
+   var PaletteColour = F2(function (a,b) {
+      return {name: a,hex: b};
+   });
+   var dummyOtherPalettes = _U.list([{name: $Maybe.Just("August")
+                                     ,colours: _U.list([{name: "Ash",hex: "#655643"}
+                                                       ,{name: "Only Cyan",hex: "#80BCA3"}
+                                                       ,{name: "Indivisible",hex: "#F6F7BD"}
+                                                       ,{name: "Golden Apple",hex: "#E6AC27"}])}
+                                    ,{name: $Maybe.Just("Nordic Sea")
+                                     ,colours: _U.list([{name: "Baltic",hex: "#448698"}
+                                                       ,{name: "Pale Blue Eyes",hex: "#90B0C4"}
+                                                       ,{name: "The Church",hex: "#BFC1BC"}
+                                                       ,{name: "Soft Feeling",hex: "#FAE5E3"}
+                                                       ,{name: "Ecorce",hex: "#645B56"}])}
+                                    ,{name: $Maybe.Just("Forest Shadows")
+                                     ,colours: _U.list([{name: "Divas Black",hex: "#100C17"}
+                                                       ,{name: "Whispering Forest",hex: "#658068"}
+                                                       ,{name: "Putrid",hex: "#D9DDD9"}])}]);
+   var init = function (palette) {
+      return {featuredPalette: {name: $Maybe.Nothing
+                               ,colours: palette}
+             ,otherPalettes: dummyOtherPalettes
+             ,selectedPalette: {name: $Maybe.Nothing,colours: _U.list([])}};
+   };
+   return _elm.Component.ColourFilter.values = {_op: _op
+                                               ,init: init
+                                               ,update: update
+                                               ,view: view
+                                               ,Model: Model};
+};
+Elm.Component = Elm.Component || {};
+Elm.Component.MaterialFilter = Elm.Component.MaterialFilter || {};
+Elm.Component.MaterialFilter.make = function (_elm) {
+   "use strict";
+   _elm.Component = _elm.Component || {};
+   _elm.Component.MaterialFilter = _elm.Component.MaterialFilter || {};
+   if (_elm.Component.MaterialFilter.values)
+   return _elm.Component.MaterialFilter.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var view = F2(function (address,model) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("filter-panel material-filter")]),
+      _U.list([$Html.text("material")]));
+   });
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      return model;
+   });
+   var NoOp = {ctor: "NoOp"};
+   var init = {materials: _U.list([])};
+   var Model = function (a) {    return {materials: a};};
+   var Material = F2(function (a,b) {
+      return {name: a,isSelected: b};
+   });
+   return _elm.Component.MaterialFilter.values = {_op: _op
+                                                 ,init: init
+                                                 ,update: update
+                                                 ,view: view
+                                                 ,Model: Model};
+};
+Elm.Component = Elm.Component || {};
 Elm.Component.Product = Elm.Component.Product || {};
 Elm.Component.Product.make = function (_elm) {
    "use strict";
@@ -11511,6 +11732,83 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
                                                 ,Model: Model};
 };
 Elm.Component = Elm.Component || {};
+Elm.Component.ProductFilter = Elm.Component.ProductFilter || {};
+Elm.Component.ProductFilter.make = function (_elm) {
+   "use strict";
+   _elm.Component = _elm.Component || {};
+   _elm.Component.ProductFilter = _elm.Component.ProductFilter || {};
+   if (_elm.Component.ProductFilter.values)
+   return _elm.Component.ProductFilter.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var view = F2(function (address,model) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("filter-panel product-filter")]),
+      _U.list([$Html.text("product...")]));
+   });
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      return model;
+   });
+   var NoOp = {ctor: "NoOp"};
+   var init = {products: _U.list([]),selectedProduct: ""};
+   var Model = F2(function (a,b) {
+      return {products: a,selectedProduct: b};
+   });
+   return _elm.Component.ProductFilter.values = {_op: _op
+                                                ,init: init
+                                                ,update: update
+                                                ,view: view
+                                                ,Model: Model};
+};
+Elm.Component = Elm.Component || {};
+Elm.Component.StyleFilter = Elm.Component.StyleFilter || {};
+Elm.Component.StyleFilter.make = function (_elm) {
+   "use strict";
+   _elm.Component = _elm.Component || {};
+   _elm.Component.StyleFilter = _elm.Component.StyleFilter || {};
+   if (_elm.Component.StyleFilter.values)
+   return _elm.Component.StyleFilter.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var view = F2(function (address,model) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("filter-panel style-filter")]),
+      _U.list([$Html.text("style...")]));
+   });
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      return model;
+   });
+   var NoOp = {ctor: "NoOp"};
+   var init = {styles: _U.list([])};
+   var Model = function (a) {    return {styles: a};};
+   var Style = F2(function (a,b) {
+      return {name: a,isSelected: b};
+   });
+   return _elm.Component.StyleFilter.values = {_op: _op
+                                              ,init: init
+                                              ,update: update
+                                              ,view: view
+                                              ,Model: Model};
+};
+Elm.Component = Elm.Component || {};
 Elm.Component.SmartFeedTileDetail = Elm.Component.SmartFeedTileDetail || {};
 Elm.Component.SmartFeedTileDetail.make = function (_elm) {
    "use strict";
@@ -11520,31 +11818,24 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
    return _elm.Component.SmartFeedTileDetail.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Component$ColourFilter = Elm.Component.ColourFilter.make(_elm),
+   $Component$MaterialFilter = Elm.Component.MaterialFilter.make(_elm),
    $Component$Product = Elm.Component.Product.make(_elm),
+   $Component$ProductFilter = Elm.Component.ProductFilter.make(_elm),
+   $Component$StyleFilter = Elm.Component.StyleFilter.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var filterView = F2(function (address,model) {
+   var styleFilterView = F2(function (address,model) {
       return A2($Html.div,
-      _U.list([$Html$Attributes.$class("filter-container")]),
-      _U.list([A2($Html.span,
-              _U.list([$Html$Attributes.$class("filter-title")]),
-              _U.list([$Html.text("Show me more like this...")]))
-              ,A2($Html.div,
-              _U.list([$Html$Attributes.$class("action-row")]),
-              _U.list([A2($Html.button,
-                      _U.list([]),
-                      _U.list([$Html.text("Colour")]))
-                      ,A2($Html.button,_U.list([]),_U.list([$Html.text("Materials")]))
-                      ,A2($Html.button,_U.list([]),_U.list([$Html.text("Product")]))
-                      ,A2($Html.button,
-                      _U.list([]),
-                      _U.list([$Html.text("Style")]))]))]));
+      _U.list([]),
+      _U.list([$Html.text("style")]));
    });
    var productView = F2(function (address,product) {
       return A2($Html.li,
@@ -11577,6 +11868,61 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
                       _U.list([$Html$Attributes.$class("fa fa-info-circle")]),
                       _U.list([]))]))]));
    });
+   var ShowStyleFilter = {ctor: "ShowStyleFilter"};
+   var ShowProductFilter = {ctor: "ShowProductFilter"};
+   var ShowMaterialFilter = {ctor: "ShowMaterialFilter"};
+   var ShowColourFilter = {ctor: "ShowColourFilter"};
+   var StyleFilterActions = function (a) {
+      return {ctor: "StyleFilterActions",_0: a};
+   };
+   var ProductFilterActions = function (a) {
+      return {ctor: "ProductFilterActions",_0: a};
+   };
+   var MaterialFilterActions = function (a) {
+      return {ctor: "MaterialFilterActions",_0: a};
+   };
+   var ColourFilterActions = function (a) {
+      return {ctor: "ColourFilterActions",_0: a};
+   };
+   var filterView = F2(function (address,model) {
+      var currentFilter = function () {
+         var _p0 = model.visibleFilter;
+         switch (_p0.ctor)
+         {case "None": return A2($Html.div,_U.list([]),_U.list([]));
+            case "Colour": return A2($Component$ColourFilter.view,
+              A2($Signal.forwardTo,address,ColourFilterActions),
+              model.colourFilter);
+            case "Material": return A2($Component$MaterialFilter.view,
+              A2($Signal.forwardTo,address,MaterialFilterActions),
+              model.materialFilter);
+            case "Product": return A2($Component$ProductFilter.view,
+              A2($Signal.forwardTo,address,ProductFilterActions),
+              model.productFilter);
+            default: return A2($Component$StyleFilter.view,
+              A2($Signal.forwardTo,address,StyleFilterActions),
+              model.styleFilter);}
+      }();
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("filter-container")]),
+      _U.list([A2($Html.span,
+              _U.list([$Html$Attributes.$class("filter-title")]),
+              _U.list([$Html.text("Show me more like this...")]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("action-row")]),
+              _U.list([A2($Html.button,
+                      _U.list([A2($Html$Events.onClick,address,ShowColourFilter)]),
+                      _U.list([$Html.text("Colour")]))
+                      ,A2($Html.button,
+                      _U.list([A2($Html$Events.onClick,address,ShowMaterialFilter)]),
+                      _U.list([$Html.text("Material")]))
+                      ,A2($Html.button,
+                      _U.list([A2($Html$Events.onClick,address,ShowProductFilter)]),
+                      _U.list([$Html.text("Product")]))
+                      ,A2($Html.button,
+                      _U.list([A2($Html$Events.onClick,address,ShowStyleFilter)]),
+                      _U.list([$Html.text("Style")]))]))
+              ,currentFilter]));
+   });
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("tile-detail-contents")]),
@@ -11585,14 +11931,62 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
               A2($List.map,productView(address),model.products))
               ,A2(filterView,address,model)]));
    });
-   var update = F2(function (action,model) {
-      var _p0 = action;
-      return model;
-   });
    var NoOp = {ctor: "NoOp"};
    var actions = $Signal.mailbox(NoOp);
+   var Model = F6(function (a,b,c,d,e,f) {
+      return {products: a
+             ,visibleFilter: b
+             ,colourFilter: c
+             ,materialFilter: d
+             ,productFilter: e
+             ,styleFilter: f};
+   });
+   var Style = {ctor: "Style"};
+   var Product = {ctor: "Product"};
+   var Material = {ctor: "Material"};
+   var Colour = {ctor: "Colour"};
+   var update = F2(function (action,model) {
+      var _p1 = action;
+      switch (_p1.ctor)
+      {case "NoOp": return model;
+         case "ColourFilterActions": return _U.update(model,
+           {colourFilter: A2($Component$ColourFilter.update,
+           _p1._0,
+           model.colourFilter)});
+         case "MaterialFilterActions": return _U.update(model,
+           {materialFilter: A2($Component$MaterialFilter.update,
+           _p1._0,
+           model.materialFilter)});
+         case "ProductFilterActions": return _U.update(model,
+           {productFilter: A2($Component$ProductFilter.update,
+           _p1._0,
+           model.productFilter)});
+         case "StyleFilterActions": return _U.update(model,
+           {styleFilter: A2($Component$StyleFilter.update,
+           _p1._0,
+           model.styleFilter)});
+         case "ShowColourFilter": return _U.update(model,
+           {visibleFilter: Colour});
+         case "ShowMaterialFilter": return _U.update(model,
+           {visibleFilter: Material});
+         case "ShowProductFilter": return _U.update(model,
+           {visibleFilter: Product});
+         default: return _U.update(model,{visibleFilter: Style});}
+   });
+   var None = {ctor: "None"};
    var init = function (products) {
-      return {products: products};
+      return {products: products
+             ,visibleFilter: None
+             ,colourFilter: $Component$ColourFilter.init(_U.list([{name: "Black"
+                                                                  ,hex: "#1A1611"}
+                                                                 ,{name: "Grey",hex: "#D3D0CB"}
+                                                                 ,{name: "",hex: "#ABA49A"}
+                                                                 ,{name: "White",hex: "#FFFFFF"}
+                                                                 ,{name: "Brown",hex: "#543822"}
+                                                                 ,{name: "Fawn",hex: "#AC9C82"}]))
+             ,materialFilter: $Component$MaterialFilter.init
+             ,productFilter: $Component$ProductFilter.init
+             ,styleFilter: $Component$StyleFilter.init};
    };
    var model = function (products) {
       return A3($Signal.foldp,
@@ -11600,13 +11994,26 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
       init(products),
       actions.signal);
    };
-   var Model = function (a) {    return {products: a};};
    return _elm.Component.SmartFeedTileDetail.values = {_op: _op
+                                                      ,None: None
+                                                      ,Colour: Colour
+                                                      ,Material: Material
+                                                      ,Product: Product
+                                                      ,Style: Style
                                                       ,Model: Model
                                                       ,init: init
                                                       ,NoOp: NoOp
+                                                      ,ColourFilterActions: ColourFilterActions
+                                                      ,MaterialFilterActions: MaterialFilterActions
+                                                      ,ProductFilterActions: ProductFilterActions
+                                                      ,StyleFilterActions: StyleFilterActions
+                                                      ,ShowColourFilter: ShowColourFilter
+                                                      ,ShowMaterialFilter: ShowMaterialFilter
+                                                      ,ShowProductFilter: ShowProductFilter
+                                                      ,ShowStyleFilter: ShowStyleFilter
                                                       ,update: update
                                                       ,productView: productView
+                                                      ,styleFilterView: styleFilterView
                                                       ,filterView: filterView
                                                       ,view: view
                                                       ,actions: actions
@@ -11642,9 +12049,10 @@ Elm.Component.SmartFeed.make = function (_elm) {
            {tileDetail: A2($Component$SmartFeedTileDetail.update,
            _p0._0,
            model.tileDetail)});
-         case "ShowTileDetail": return _U.update(model,
-           {isTileDetailView: true
-           ,tileDetail: {products: _p0._0.products}});
+         case "ShowTileDetail":
+         var tileDetail = $Component$SmartFeedTileDetail.init(_p0._0.products);
+           return _U.update(model,
+           {isTileDetailView: true,tileDetail: tileDetail});
          default: return _U.update(model,
            {isTileDetailView: false
            ,tileDetail: $Component$SmartFeedTileDetail.init(_U.list([]))});}

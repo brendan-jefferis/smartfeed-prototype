@@ -16,6 +16,10 @@ $icon-size: 18px;
 		box-sizing: border-box;
 	}
 
+	ul {
+		margin-bottom: 8px;
+	}
+
 	.btn-light {
 		background: $light-grey;
 		color: $default-color;
@@ -189,6 +193,61 @@ $icon-size: 18px;
 						&:not(:first-of-type) {
 							margin-left: $default-padding;
 						}
+					}
+				}
+
+				.filter-panel {
+
+					h6.subheader {
+						margin: 12px 0 0;
+						line-height: 24px;
+
+						&.with-divider {
+							margin-top: 24px;
+							border-top: 1px solid #ccc;
+						}
+					}
+
+					&.colour-filter {
+						
+						.colour-palette {
+
+							.colour-cell {
+								width: 36px;
+								height: 12px;
+								display: inline-block;
+								position: relative;
+								height: 36px;
+								cursor: pointer;
+
+								&.selected {
+
+									&:after {
+										position: absolute;
+										top: 4px;
+										right: 4px;
+										content: "\f00c";
+										font-size: 14px;
+										font-family: 'FontAwesome';
+										color: rgba(255, 255, 255, 1);
+										text-shadow: 0 0 1px rgba(10, 10, 10, 1);
+									}
+								}
+							}
+						}
+						
+					}
+
+					&.material-filter {
+
+					}
+
+					&.product-filter {
+
+					}
+
+					&.style-filter {
+
 					}
 				}
 			}

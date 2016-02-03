@@ -21,3 +21,15 @@ button {
   background: #333;
   color: #fff;
   font-weight: bold; }
+  button.btn-small {
+    height: 24px;
+    font-size: 12px;
+    padding: 0 12px; }
+  button.secondary {
+    background: #ccc;
+    color: #333; }
+
+ul.blank {
+  margin: 0;
+  padding: 0;
+  list-style: none; }

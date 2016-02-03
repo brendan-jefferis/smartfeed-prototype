@@ -144,10 +144,13 @@ update action model =
       }
 
     ShowTileDetail tile ->
-      { model |
-          isTileDetailView = True
-        , tileDetail = { products = tile.products }
-      }
+      let
+        tileDetail = TileDetail.init tile.products
+      in
+        { model |
+            isTileDetailView = True
+          , tileDetail = tileDetail
+        }
 
     HideTileDetail ->
       { model |
