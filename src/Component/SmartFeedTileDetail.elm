@@ -1,15 +1,14 @@
-module Component.SmartFeedTileDetail where
+module Component.SmartFeedTileDetail (Model, init, Action, update, view) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 
-import Component.Product as Product
 import Component.ColourFilter as ColourFilter
 import Component.MaterialFilter as MaterialFilter
 import Component.ProductFilter as ProductFilter
 import Component.StyleFilter as StyleFilter
-
+import Common.Alias exposing (Product, Palette)
 
 
 
@@ -23,7 +22,8 @@ type Filter
   | Style
 
 type alias Model =
-  { products: List Product.Model
+  { products: List Product
+  , palette: Palette
   , visibleFilter: Filter
   , colourFilter: ColourFilter.Model
   , materialFilter: MaterialFilter.Model
@@ -31,11 +31,12 @@ type alias Model =
   , styleFilter: StyleFilter.Model
   }
 
-init : List Product.Model -> Model
-init products =
+init : List Product -> Palette -> Palette -> Model
+init products selectedPalette featuredPalette =
   { products = products
+  , palette = featuredPalette
   , visibleFilter = None
-  , colourFilter = ColourFilter.init [ { name = "Black", hex = "#1A1611" }, { name = "Grey", hex = "#D3D0CB" }, { name = "", hex = "#ABA49A" }, { name = "White", hex = "#FFFFFF" }, { name = "Brown", hex = "#543822" }, { name = "Fawn", hex = "#AC9C82" } ] -- pass down colour palette here
+  , colourFilter = ColourFilter.init selectedPalette featuredPalette -- pass down colour palette here
   , materialFilter = MaterialFilter.init
   , productFilter = ProductFilter.init
   , styleFilter = StyleFilter.init
@@ -91,7 +92,7 @@ update action model =
     ShowMaterialFilter ->
       { model |
           visibleFilter = Material
-      }
+        }
 
     ShowProductFilter ->
       { model |
@@ -108,7 +109,7 @@ update action model =
 
 --======================================| VIEW |
 
-productView : Signal.Address Action -> Product.Model -> Html
+productView : Signal.Address Action -> Product -> Html
 productView address product =
   li
     [ class "product-list-item" ]
@@ -208,6 +209,6 @@ actions : Signal.Mailbox Action
 actions =
   Signal.mailbox NoOp
 
-model : List Product.Model -> Signal Model
-model products =
-  Signal.foldp update (init products) actions.signal
+model : List Product -> Palette -> Palette -> Signal Model
+model products selectedPalette featuredPalette =
+  Signal.foldp update (init products selectedPalette featuredPalette) actions.signal

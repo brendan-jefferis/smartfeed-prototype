@@ -32,3 +32,9 @@
     .mobile-sim-container .mock-device-nav .nav-text {
       font-weight: bold;
       font-family: consolas, monospace; }
+  .mobile-sim-container #debug {
+    position: fixed;
+    bottom: 20px;
+    left: 20px; }
+    .mobile-sim-container #debug p {
+      color: blue; }

@@ -4,6 +4,9 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 
+import Common.Alias exposing (Palette, PaletteColour)
+
+
 
 
 --======================================| DUMMY DATA |
@@ -41,27 +44,17 @@ dummyOtherPalettes =
 
 --======================================| MODEL |
 
-type alias PaletteColour =
-  { name: String
-  , hex: String
-  }
-
-type alias Palette =
-  { name: Maybe String
-  , colours: List PaletteColour
-  }
-
 type alias Model =
   { featuredPalette: Palette
   , otherPalettes: List Palette
   , selectedPalette: Palette
   }
 
-init : List PaletteColour -> Model
-init palette =
-  { featuredPalette = { name = Nothing, colours = palette }
+init : Palette -> Palette -> Model
+init selectedPalette featuredPalette =
+  { featuredPalette = featuredPalette
   , otherPalettes = dummyOtherPalettes
-  , selectedPalette = { name = Nothing, colours = [] }
+  , selectedPalette = selectedPalette
   }
 
 
@@ -183,15 +176,21 @@ view address model =
             ]
         else 
           div [] []
-      , h6
-          [ class "subheader" ]
-          [ text "Colours found in this look" ]
-      , ul
-          [ class "blank colour-palette" ]
-          (List.map (colourCell address featuredPaletteCellCount model.selectedPalette.colours) model.featuredPalette.colours)
-      , h6
-        [ class "subheader with-divider" ]
-        [ text "Other palettes" ]
+      , if featuredPaletteCellCount > 0 then
+          div
+            [ ]
+            [ h6
+                [ class "subheader" ]
+                [ text "Colours found in this look" ]
+            , ul
+                [ class "blank colour-palette" ]
+                (List.map (colourCell address featuredPaletteCellCount model.selectedPalette.colours) model.featuredPalette.colours)
+            , h6
+              [ class "subheader with-divider" ]
+              [ text "Other palettes" ]
+            ]
+        else
+          div [] []
       , ul
           [ class "blank" ]
           (List.map (paletteList address model.selectedPalette) model.otherPalettes)

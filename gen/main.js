@@ -11403,6 +11403,44 @@ Elm.StartApp.Simple.make = function (_elm) {
                                         ,Config: Config
                                         ,start: start};
 };
+Elm.Common = Elm.Common || {};
+Elm.Common.Alias = Elm.Common.Alias || {};
+Elm.Common.Alias.make = function (_elm) {
+   "use strict";
+   _elm.Common = _elm.Common || {};
+   _elm.Common.Alias = _elm.Common.Alias || {};
+   if (_elm.Common.Alias.values) return _elm.Common.Alias.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var Product = F8(function (a,b,c,d,e,f,g,h) {
+      return {title: a
+             ,description: b
+             ,price: c
+             ,isFavourite: d
+             ,isInCart: e
+             ,photoUrl: f
+             ,thumbnailUrl: g
+             ,url: h};
+   });
+   var emptyPalette = {name: $Maybe.Nothing,colours: _U.list([])};
+   var Palette = F2(function (a,b) {
+      return {name: a,colours: b};
+   });
+   var PaletteColour = F2(function (a,b) {
+      return {name: a,hex: b};
+   });
+   return _elm.Common.Alias.values = {_op: _op
+                                     ,PaletteColour: PaletteColour
+                                     ,Palette: Palette
+                                     ,emptyPalette: emptyPalette
+                                     ,Product: Product};
+};
 Elm.Component = Elm.Component || {};
 Elm.Component.ColourFilter = Elm.Component.ColourFilter || {};
 Elm.Component.ColourFilter.make = function (_elm) {
@@ -11413,6 +11451,7 @@ Elm.Component.ColourFilter.make = function (_elm) {
    return _elm.Component.ColourFilter.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Common$Alias = Elm.Common.Alias.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
@@ -11526,20 +11565,24 @@ Elm.Component.ColourFilter.make = function (_elm) {
                       _U.list([$Html.text("Clear all")]))])) : A2($Html.div,
               _U.list([]),
               _U.list([]))
-              ,A2($Html.h6,
-              _U.list([$Html$Attributes.$class("subheader")]),
-              _U.list([$Html.text("Colours found in this look")]))
-              ,A2($Html.ul,
-              _U.list([$Html$Attributes.$class("blank colour-palette")]),
-              A2($List.map,
-              A3(colourCell,
-              address,
-              featuredPaletteCellCount,
-              model.selectedPalette.colours),
-              model.featuredPalette.colours))
-              ,A2($Html.h6,
-              _U.list([$Html$Attributes.$class("subheader with-divider")]),
-              _U.list([$Html.text("Other palettes")]))
+              ,_U.cmp(featuredPaletteCellCount,0) > 0 ? A2($Html.div,
+              _U.list([]),
+              _U.list([A2($Html.h6,
+                      _U.list([$Html$Attributes.$class("subheader")]),
+                      _U.list([$Html.text("Colours found in this look")]))
+                      ,A2($Html.ul,
+                      _U.list([$Html$Attributes.$class("blank colour-palette")]),
+                      A2($List.map,
+                      A3(colourCell,
+                      address,
+                      featuredPaletteCellCount,
+                      model.selectedPalette.colours),
+                      model.featuredPalette.colours))
+                      ,A2($Html.h6,
+                      _U.list([$Html$Attributes.$class("subheader with-divider")]),
+                      _U.list([$Html.text("Other palettes")]))])) : A2($Html.div,
+              _U.list([]),
+              _U.list([]))
               ,A2($Html.ul,
               _U.list([$Html$Attributes.$class("blank")]),
               A2($List.map,
@@ -11551,12 +11594,6 @@ Elm.Component.ColourFilter.make = function (_elm) {
       return {featuredPalette: a
              ,otherPalettes: b
              ,selectedPalette: c};
-   });
-   var Palette = F2(function (a,b) {
-      return {name: a,colours: b};
-   });
-   var PaletteColour = F2(function (a,b) {
-      return {name: a,hex: b};
    });
    var dummyOtherPalettes = _U.list([{name: $Maybe.Just("August")
                                      ,colours: _U.list([{name: "Ash",hex: "#655643"}
@@ -11573,12 +11610,11 @@ Elm.Component.ColourFilter.make = function (_elm) {
                                      ,colours: _U.list([{name: "Divas Black",hex: "#100C17"}
                                                        ,{name: "Whispering Forest",hex: "#658068"}
                                                        ,{name: "Putrid",hex: "#D9DDD9"}])}]);
-   var init = function (palette) {
-      return {featuredPalette: {name: $Maybe.Nothing
-                               ,colours: palette}
+   var init = F2(function (selectedPalette,featuredPalette) {
+      return {featuredPalette: featuredPalette
              ,otherPalettes: dummyOtherPalettes
-             ,selectedPalette: {name: $Maybe.Nothing,colours: _U.list([])}};
-   };
+             ,selectedPalette: selectedPalette};
+   });
    return _elm.Component.ColourFilter.values = {_op: _op
                                                ,init: init
                                                ,update: update
@@ -11625,34 +11661,6 @@ Elm.Component.MaterialFilter.make = function (_elm) {
                                                  ,Model: Model};
 };
 Elm.Component = Elm.Component || {};
-Elm.Component.Product = Elm.Component.Product || {};
-Elm.Component.Product.make = function (_elm) {
-   "use strict";
-   _elm.Component = _elm.Component || {};
-   _elm.Component.Product = _elm.Component.Product || {};
-   if (_elm.Component.Product.values)
-   return _elm.Component.Product.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var Model = F8(function (a,b,c,d,e,f,g,h) {
-      return {title: a
-             ,description: b
-             ,price: c
-             ,isFavourite: d
-             ,isInCart: e
-             ,photoUrl: f
-             ,thumbnailUrl: g
-             ,url: h};
-   });
-   return _elm.Component.Product.values = {_op: _op,Model: Model};
-};
-Elm.Component = Elm.Component || {};
 Elm.Component.SmartFeedTile = Elm.Component.SmartFeedTile || {};
 Elm.Component.SmartFeedTile.make = function (_elm) {
    "use strict";
@@ -11662,7 +11670,7 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
    return _elm.Component.SmartFeedTile.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
-   $Component$Product = Elm.Component.Product.make(_elm),
+   $Common$Alias = Elm.Common.Alias.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
@@ -11715,8 +11723,9 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
               ,photoUrl: ""
               ,isFavourite: false
               ,url: ""
-              ,products: _U.list([])};
-   var Model = F8(function (a,b,c,d,e,f,g,h) {
+              ,products: _U.list([])
+              ,palette: {name: $Maybe.Nothing,colours: _U.list([])}};
+   var Model = F9(function (a,b,c,d,e,f,g,h,i) {
       return {tileId: a
              ,brand: b
              ,logoUrl: c
@@ -11724,7 +11733,8 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
              ,photoUrl: e
              ,isFavourite: f
              ,url: g
-             ,products: h};
+             ,products: h
+             ,palette: i};
    });
    return _elm.Component.SmartFeedTile.values = {_op: _op
                                                 ,init: init
@@ -11818,9 +11828,9 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
    return _elm.Component.SmartFeedTileDetail.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Common$Alias = Elm.Common.Alias.make(_elm),
    $Component$ColourFilter = Elm.Component.ColourFilter.make(_elm),
    $Component$MaterialFilter = Elm.Component.MaterialFilter.make(_elm),
-   $Component$Product = Elm.Component.Product.make(_elm),
    $Component$ProductFilter = Elm.Component.ProductFilter.make(_elm),
    $Component$StyleFilter = Elm.Component.StyleFilter.make(_elm),
    $Debug = Elm.Debug.make(_elm),
@@ -11933,13 +11943,14 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
    });
    var NoOp = {ctor: "NoOp"};
    var actions = $Signal.mailbox(NoOp);
-   var Model = F6(function (a,b,c,d,e,f) {
+   var Model = F7(function (a,b,c,d,e,f,g) {
       return {products: a
-             ,visibleFilter: b
-             ,colourFilter: c
-             ,materialFilter: d
-             ,productFilter: e
-             ,styleFilter: f};
+             ,palette: b
+             ,visibleFilter: c
+             ,colourFilter: d
+             ,materialFilter: e
+             ,productFilter: f
+             ,styleFilter: g};
    });
    var Style = {ctor: "Style"};
    var Product = {ctor: "Product"};
@@ -11974,50 +11985,32 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
          default: return _U.update(model,{visibleFilter: Style});}
    });
    var None = {ctor: "None"};
-   var init = function (products) {
+   var init = F3(function (products,
+   selectedPalette,
+   featuredPalette) {
       return {products: products
+             ,palette: featuredPalette
              ,visibleFilter: None
-             ,colourFilter: $Component$ColourFilter.init(_U.list([{name: "Black"
-                                                                  ,hex: "#1A1611"}
-                                                                 ,{name: "Grey",hex: "#D3D0CB"}
-                                                                 ,{name: "",hex: "#ABA49A"}
-                                                                 ,{name: "White",hex: "#FFFFFF"}
-                                                                 ,{name: "Brown",hex: "#543822"}
-                                                                 ,{name: "Fawn",hex: "#AC9C82"}]))
+             ,colourFilter: A2($Component$ColourFilter.init,
+             selectedPalette,
+             featuredPalette)
              ,materialFilter: $Component$MaterialFilter.init
              ,productFilter: $Component$ProductFilter.init
              ,styleFilter: $Component$StyleFilter.init};
-   };
-   var model = function (products) {
+   });
+   var model = F3(function (products,
+   selectedPalette,
+   featuredPalette) {
       return A3($Signal.foldp,
       update,
-      init(products),
+      A3(init,products,selectedPalette,featuredPalette),
       actions.signal);
-   };
+   });
    return _elm.Component.SmartFeedTileDetail.values = {_op: _op
-                                                      ,None: None
-                                                      ,Colour: Colour
-                                                      ,Material: Material
-                                                      ,Product: Product
-                                                      ,Style: Style
-                                                      ,Model: Model
                                                       ,init: init
-                                                      ,NoOp: NoOp
-                                                      ,ColourFilterActions: ColourFilterActions
-                                                      ,MaterialFilterActions: MaterialFilterActions
-                                                      ,ProductFilterActions: ProductFilterActions
-                                                      ,StyleFilterActions: StyleFilterActions
-                                                      ,ShowColourFilter: ShowColourFilter
-                                                      ,ShowMaterialFilter: ShowMaterialFilter
-                                                      ,ShowProductFilter: ShowProductFilter
-                                                      ,ShowStyleFilter: ShowStyleFilter
                                                       ,update: update
-                                                      ,productView: productView
-                                                      ,styleFilterView: styleFilterView
-                                                      ,filterView: filterView
                                                       ,view: view
-                                                      ,actions: actions
-                                                      ,model: model};
+                                                      ,Model: Model};
 };
 Elm.Component = Elm.Component || {};
 Elm.Component.SmartFeed = Elm.Component.SmartFeed || {};
@@ -12029,7 +12022,7 @@ Elm.Component.SmartFeed.make = function (_elm) {
    return _elm.Component.SmartFeed.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
-   $Component$Product = Elm.Component.Product.make(_elm),
+   $Common$Alias = Elm.Common.Alias.make(_elm),
    $Component$SmartFeedTile = Elm.Component.SmartFeedTile.make(_elm),
    $Component$SmartFeedTileDetail = Elm.Component.SmartFeedTileDetail.make(_elm),
    $Debug = Elm.Debug.make(_elm),
@@ -12045,17 +12038,26 @@ Elm.Component.SmartFeed.make = function (_elm) {
       var _p0 = action;
       switch (_p0.ctor)
       {case "NoOp": return model;
-         case "TileDetail": return _U.update(model,
-           {tileDetail: A2($Component$SmartFeedTileDetail.update,
+         case "TileDetail":
+         var tileDetail = A2($Component$SmartFeedTileDetail.update,
            _p0._0,
-           model.tileDetail)});
-         case "ShowTileDetail":
-         var tileDetail = $Component$SmartFeedTileDetail.init(_p0._0.products);
+           model.tileDetail);
+           var colourFilter = {colour: tileDetail.colourFilter.selectedPalette};
+           return _U.update(model,
+           {tileDetail: tileDetail,filter: colourFilter});
+         case "ShowTileDetail": var _p1 = _p0._0;
+           var tileDetail = A3($Component$SmartFeedTileDetail.init,
+           _p1.products,
+           model.filter.colour,
+           _p1.palette);
            return _U.update(model,
            {isTileDetailView: true,tileDetail: tileDetail});
          default: return _U.update(model,
            {isTileDetailView: false
-           ,tileDetail: $Component$SmartFeedTileDetail.init(_U.list([]))});}
+           ,tileDetail: A3($Component$SmartFeedTileDetail.init,
+           _U.list([]),
+           $Common$Alias.emptyPalette,
+           $Common$Alias.emptyPalette)});}
    });
    var HideTileDetail = {ctor: "HideTileDetail"};
    var ShowTileDetail = function (a) {
@@ -12074,6 +12076,13 @@ Elm.Component.SmartFeed.make = function (_elm) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("smart-feed")]),
       _U.list([A2($Html.div,
+              _U.list([$Html$Attributes.id("debug")]),
+              _U.list([A2($Html.p,
+              _U.list([]),
+              _U.list([$Html.text(A2($Basics._op["++"],
+              "Filter: ",
+              $Basics.toString(model.filter)))]))]))
+              ,A2($Html.div,
               _U.list([$Html$Attributes.$class("scrollable-list")]),
               _U.list([A2($Html.ul,
               _U.list([$Html$Attributes.$class("tile-list")]),
@@ -12092,9 +12101,13 @@ Elm.Component.SmartFeed.make = function (_elm) {
    });
    var NoOp = {ctor: "NoOp"};
    var actions = $Signal.mailbox(NoOp);
-   var Model = F3(function (a,b,c) {
-      return {tiles: a,isTileDetailView: b,tileDetail: c};
+   var Model = F4(function (a,b,c,d) {
+      return {tiles: a
+             ,isTileDetailView: b
+             ,tileDetail: c
+             ,filter: d};
    });
+   var Filter = function (a) {    return {colour: a};};
    var dummyProductsTwo = _U.list([{title: "Product 4"
                                    ,description: "This is the fourth product"
                                    ,price: 8.99
@@ -12158,7 +12171,14 @@ Elm.Component.SmartFeed.make = function (_elm) {
                              ,photoUrl: "/images/tile/nordic-room.png"
                              ,isFavourite: false
                              ,url: "/tile/1"
-                             ,products: dummyProductsOne}
+                             ,products: dummyProductsOne
+                             ,palette: {name: $Maybe.Nothing
+                                       ,colours: _U.list([{name: "Black",hex: "#1A1611"}
+                                                         ,{name: "Grey",hex: "#D3D0CB"}
+                                                         ,{name: "",hex: "#ABA49A"}
+                                                         ,{name: "White",hex: "#FFFFFF"}
+                                                         ,{name: "Brown",hex: "#543822"}
+                                                         ,{name: "Fawn",hex: "#AC9C82"}])}}
                             ,{tileId: 2
                              ,brand: "Freedom Furniture"
                              ,logoUrl: "/images/logo/freedom-logo.png"
@@ -12166,10 +12186,20 @@ Elm.Component.SmartFeed.make = function (_elm) {
                              ,photoUrl: "/images/tile/signature-collection.png"
                              ,isFavourite: false
                              ,url: "/tile/2"
-                             ,products: dummyProductsTwo}]);
+                             ,products: dummyProductsTwo
+                             ,palette: {name: $Maybe.Nothing
+                                       ,colours: _U.list([{name: "Midnight",hex: "#211F20"}
+                                                         ,{name: "Slate",hex: "#47464B"}
+                                                         ,{name: "Light Cyan",hex: "#7ED3D0"}
+                                                         ,{name: "Brick",hex: "#CA3727"}
+                                                         ,{name: "Lemon tree",hex: "#E3CD2A"}])}}]);
    var init = {tiles: dummyTiles
               ,isTileDetailView: false
-              ,tileDetail: $Component$SmartFeedTileDetail.init(_U.list([]))};
+              ,tileDetail: A3($Component$SmartFeedTileDetail.init,
+              _U.list([]),
+              $Common$Alias.emptyPalette,
+              $Common$Alias.emptyPalette)
+              ,filter: {colour: $Common$Alias.emptyPalette}};
    var model = A3($Signal.foldp,update,init,actions.signal);
    return _elm.Component.SmartFeed.values = {_op: _op
                                             ,init: init

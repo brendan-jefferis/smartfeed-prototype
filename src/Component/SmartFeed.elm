@@ -6,14 +6,14 @@ import Html.Events exposing (onClick)
 
 import Component.SmartFeedTile as Tile
 import Component.SmartFeedTileDetail as TileDetail
-import Component.Product as Product
+import Common.Alias exposing (Product, Palette, emptyPalette)
 
 
 
 
 --======================================| DUMMY DATA |
 
-dummyProductsOne : List Product.Model
+dummyProductsOne : List Product
 dummyProductsOne =
   [ { title = "Dahlia sofa"
     , description = "This is the first product"
@@ -53,7 +53,7 @@ dummyProductsOne =
     }
   ]
 
-dummyProductsTwo : List Product.Model
+dummyProductsTwo : List Product
 dummyProductsTwo =
   [ { title = "Product 4"
     , description = "This is the fourth product"
@@ -94,6 +94,7 @@ dummyTiles =
     , isFavourite = False
     , url = "/tile/1"
     , products = dummyProductsOne
+    , palette = { name = Nothing, colours = [ { name = "Black", hex = "#1A1611" }, { name = "Grey", hex = "#D3D0CB" }, { name = "", hex = "#ABA49A" }, { name = "White", hex = "#FFFFFF" }, { name = "Brown", hex = "#543822" }, { name = "Fawn", hex = "#AC9C82" }] }
     }
   , { tileId = 2
     , brand = "Freedom Furniture"
@@ -103,22 +104,31 @@ dummyTiles =
     , isFavourite = False
     , url = "/tile/2"
     , products = dummyProductsTwo
+    , palette = { name = Nothing, colours = [{ name = "Midnight", hex = "#211F20"}, {name = "Slate", hex = "#47464B"}, {name = "Light Cyan", hex = "#7ED3D0"}, {name = "Brick", hex = "#CA3727"}, {name = "Lemon tree", hex = "#E3CD2A"}] }
     }
   ]
 
 --======================================| MODEL |
 
+type alias Filter =
+  { colour: Palette
+  }
+
 type alias Model =
   { tiles: List Tile.Model
   , isTileDetailView: Bool
   , tileDetail: TileDetail.Model
+  , filter: Filter
   }
 
 init : Model
 init =
   { tiles = dummyTiles
   , isTileDetailView = False
-  , tileDetail = TileDetail.init []
+  , tileDetail = TileDetail.init [] emptyPalette emptyPalette
+  , filter =
+      { colour = emptyPalette
+      }
   }
 
 
@@ -139,13 +149,18 @@ update action model =
       model
 
     TileDetail act ->
-      { model |
-          tileDetail = TileDetail.update act model.tileDetail
-      }
+      let
+        tileDetail = TileDetail.update act model.tileDetail
+        colourFilter = { colour = tileDetail.colourFilter.selectedPalette }
+      in
+        { model |
+            tileDetail = tileDetail
+          , filter = colourFilter
+        }
 
     ShowTileDetail tile ->
       let
-        tileDetail = TileDetail.init tile.products
+        tileDetail = TileDetail.init tile.products model.filter.colour tile.palette
       in
         { model |
             isTileDetailView = True
@@ -155,7 +170,7 @@ update action model =
     HideTileDetail ->
       { model |
           isTileDetailView = False
-        , tileDetail = TileDetail.init []
+        , tileDetail = TileDetail.init [] emptyPalette emptyPalette
       }
 
 
@@ -176,7 +191,13 @@ view : Signal.Address Action -> Model -> Html
 view address model =
   div
     [ class "smart-feed" ] 
-    [  div
+    [ div
+        [ id "debug" ]
+        [ p
+            [ ]
+            [ text ("Filter: " ++ (toString model.filter)) ]
+        ]
+    , div
         [ class "scrollable-list" ]
         [ ul
             [ class "tile-list" ]

@@ -3,8 +3,7 @@ module Component.SmartFeedTile (Model, init, view) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 
-import Component.Product as Product
-
+import Common.Alias exposing (Palette, Product)
 
 
 
@@ -18,7 +17,8 @@ type alias Model =
   , photoUrl: String
   , isFavourite: Bool
   , url: String
-  , products: List Product.Model
+  , products: List Product
+  , palette: Palette
   }
 
 init : Model
@@ -31,6 +31,7 @@ init =
   , isFavourite = False
   , url = ""
   , products = []
+  , palette = { name = Nothing, colours = [] }
   }
 
 
