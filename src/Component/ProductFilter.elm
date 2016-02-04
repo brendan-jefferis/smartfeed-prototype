@@ -9,8 +9,8 @@ import Html.Attributes exposing (..)
 --======================================| MODEL |
 
 type alias Model =
-  { products: List String
-  , selectedProduct: String
+  { products : List String
+  , selectedProduct : String
   }
 
 init : Model

@@ -11,7 +11,7 @@ import Component.SmartFeed as SmartFeed
 --======================================| MODEL |
 
 type alias Model =
-  { smartFeed: SmartFeed.Model
+  { smartFeed : SmartFeed.Model
   }
 
 init : Model

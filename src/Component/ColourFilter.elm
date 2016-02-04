@@ -45,9 +45,9 @@ dummyOtherPalettes =
 --======================================| MODEL |
 
 type alias Model =
-  { featuredPalette: Palette
-  , otherPalettes: List Palette
-  , selectedPalette: Palette
+  { featuredPalette : Palette
+  , otherPalettes : List Palette
+  , selectedPalette : Palette
   }
 
 init : Palette -> Palette -> Model

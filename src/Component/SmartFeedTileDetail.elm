@@ -22,13 +22,13 @@ type Filter
   | Style
 
 type alias Model =
-  { products: List Product
-  , palette: Palette
-  , visibleFilter: Filter
-  , colourFilter: ColourFilter.Model
-  , materialFilter: MaterialFilter.Model
-  , productFilter: ProductFilter.Model
-  , styleFilter: StyleFilter.Model
+  { products : List Product
+  , palette : Palette
+  , visibleFilter : Filter
+  , colourFilter : ColourFilter.Model
+  , materialFilter : MaterialFilter.Model
+  , productFilter : ProductFilter.Model
+  , styleFilter : StyleFilter.Model
   }
 
 init : List Product -> Palette -> Palette -> Model

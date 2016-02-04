@@ -10,15 +10,15 @@ import Common.Alias exposing (Palette, Product)
 --======================================| MODEL |
 
 type alias Model =
-  { tileId: Int
-  , brand: String
-  , logoUrl: String
-  , title: String
-  , photoUrl: String
-  , isFavourite: Bool
-  , url: String
-  , products: List Product
-  , palette: Palette
+  { tileId : Int
+  , brand : String
+  , logoUrl : String
+  , title : String
+  , photoUrl : String
+  , isFavourite : Bool
+  , url : String
+  , products : List Product
+  , palette : Palette
   }
 
 init : Model

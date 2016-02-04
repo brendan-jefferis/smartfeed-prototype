@@ -111,14 +111,14 @@ dummyTiles =
 --======================================| MODEL |
 
 type alias Filter =
-  { colour: Palette
+  { colour : Palette
   }
 
 type alias Model =
-  { tiles: List Tile.Model
-  , isTileDetailView: Bool
-  , tileDetail: TileDetail.Model
-  , filter: Filter
+  { tiles : List Tile.Model
+  , isTileDetailView : Bool
+  , tileDetail : TileDetail.Model
+  , filter : Filter
   }
 
 init : Model
@@ -179,7 +179,7 @@ update action model =
 
 --======================================| VIEW |
 
-tileList: Signal.Address Action -> Tile.Model -> Html
+tileList : Signal.Address Action -> Tile.Model -> Html
 tileList address tile =
   li
     [ class "tile"

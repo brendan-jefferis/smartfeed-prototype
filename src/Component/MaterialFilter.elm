@@ -9,12 +9,12 @@ import Html.Attributes exposing (..)
 --======================================| MODEL |
 
 type alias Material =
-  { name: String
-  , isSelected: Bool
+  { name : String
+  , isSelected : Bool
   }
 
 type alias Model =
-  { materials: List Material
+  { materials : List Material
   }
 
 init : Model
