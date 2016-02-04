@@ -11418,6 +11418,9 @@ Elm.Common.Alias.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var Material = F2(function (a,b) {
+      return {name: a,isSelected: b};
+   });
    var Product = F8(function (a,b,c,d,e,f,g,h) {
       return {title: a
              ,description: b
@@ -11439,7 +11442,8 @@ Elm.Common.Alias.make = function (_elm) {
                                      ,PaletteColour: PaletteColour
                                      ,Palette: Palette
                                      ,emptyPalette: emptyPalette
-                                     ,Product: Product};
+                                     ,Product: Product
+                                     ,Material: Material};
 };
 Elm.Component = Elm.Component || {};
 Elm.Component.ColourFilter = Elm.Component.ColourFilter || {};
@@ -11466,27 +11470,26 @@ Elm.Component.ColourFilter.make = function (_elm) {
       switch (_p0.ctor)
       {case "NoOp": return model;
          case "SelectColour": var _p1 = _p0._0;
-           var selectedPalette = model.selectedPalette;
+           var tempPalette = model.tempPalette;
            var updatedPalette = A2($List.member,
            _p1,
-           model.selectedPalette.colours) ? selectedPalette : _U.update(selectedPalette,
-           {colours: A2($List._op["::"],
-           _p1,
-           model.selectedPalette.colours)});
-           return _U.update(model,{selectedPalette: updatedPalette});
-         case "DeselectColor":
-         var selectedPalette = model.selectedPalette;
-           var updatedPalette = _U.update(selectedPalette,
+           model.tempPalette.colours) ? tempPalette : _U.update(tempPalette,
+           {colours: A2($List._op["::"],_p1,model.tempPalette.colours)});
+           return _U.update(model,{tempPalette: updatedPalette});
+         case "DeselectColor": var tempPalette = model.tempPalette;
+           var updatedPalette = _U.update(tempPalette,
            {colours: A2($List.filter,
            function (c) {
               return !_U.eq(c,_p0._0);
            },
-           selectedPalette.colours)});
-           return _U.update(model,{selectedPalette: updatedPalette});
+           tempPalette.colours)});
+           return _U.update(model,{tempPalette: updatedPalette});
+         case "ClearSelectedPalette": return _U.update(model,
+           {tempPalette: $Common$Alias.emptyPalette});
          default: return _U.update(model,
-           {selectedPalette: {name: $Maybe.Nothing
-                             ,colours: _U.list([])}});}
+           {selectedPalette: model.tempPalette,filteringComplete: true});}
    });
+   var SaveAndContinue = {ctor: "SaveAndContinue"};
    var ClearSelectedPalette = {ctor: "ClearSelectedPalette"};
    var DeselectColor = function (a) {
       return {ctor: "DeselectColor",_0: a};
@@ -11542,8 +11545,8 @@ Elm.Component.ColourFilter.make = function (_elm) {
               palette.colours))]));
    });
    var view = F2(function (address,model) {
-      var selectedPaletteCellCount = $List.length(model.selectedPalette.colours);
       var featuredPaletteCellCount = $List.length(model.featuredPalette.colours);
+      var selectedPaletteCellCount = $List.length(model.tempPalette.colours);
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("filter-panel colour-filter")]),
       _U.list([_U.cmp(selectedPaletteCellCount,0) > 0 ? A2($Html.div,
@@ -11557,8 +11560,8 @@ Elm.Component.ColourFilter.make = function (_elm) {
                       A3(colourCell,
                       address,
                       selectedPaletteCellCount,
-                      model.selectedPalette.colours),
-                      model.selectedPalette.colours))
+                      model.tempPalette.colours),
+                      model.tempPalette.colours))
                       ,A2($Html.button,
                       _U.list([$Html$Attributes.$class("btn-small secondary")
                               ,A2($Html$Events.onClick,address,ClearSelectedPalette)]),
@@ -11587,13 +11590,20 @@ Elm.Component.ColourFilter.make = function (_elm) {
               _U.list([$Html$Attributes.$class("blank")]),
               A2($List.map,
               A2(paletteList,address,model.selectedPalette),
-              model.otherPalettes))]));
+              model.otherPalettes))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("content-right")]),
+              _U.list([A2($Html.button,
+              _U.list([A2($Html$Events.onClick,address,SaveAndContinue)]),
+              _U.list([$Html.text("Save and continue")]))]))]));
    });
    var NoOp = {ctor: "NoOp"};
-   var Model = F3(function (a,b,c) {
+   var Model = F5(function (a,b,c,d,e) {
       return {featuredPalette: a
              ,otherPalettes: b
-             ,selectedPalette: c};
+             ,selectedPalette: c
+             ,tempPalette: d
+             ,filteringComplete: e};
    });
    var dummyOtherPalettes = _U.list([{name: $Maybe.Just("August")
                                      ,colours: _U.list([{name: "Ash",hex: "#655643"}
@@ -11613,7 +11623,9 @@ Elm.Component.ColourFilter.make = function (_elm) {
    var init = F2(function (selectedPalette,featuredPalette) {
       return {featuredPalette: featuredPalette
              ,otherPalettes: dummyOtherPalettes
-             ,selectedPalette: selectedPalette};
+             ,selectedPalette: selectedPalette
+             ,tempPalette: selectedPalette
+             ,filteringComplete: false};
    });
    return _elm.Component.ColourFilter.values = {_op: _op
                                                ,init: init
@@ -11631,6 +11643,7 @@ Elm.Component.MaterialFilter.make = function (_elm) {
    return _elm.Component.MaterialFilter.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Common$Alias = Elm.Common.Alias.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
@@ -11642,17 +11655,30 @@ Elm.Component.MaterialFilter.make = function (_elm) {
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("filter-panel material-filter")]),
-      _U.list([$Html.text("material")]));
+      _U.list([A2($Html.div,
+      _U.list([]),
+      _U.list([A2($Html.h6,
+              _U.list([$Html$Attributes.$class("subheader")]),
+              _U.list([$Html.text("Materials featured in these products")]))
+              ,A2($Html.ul,
+              _U.list([$Html$Attributes.$class("blank materials")]),
+              _U.list([]))
+              ,A2($Html.h6,
+              _U.list([$Html$Attributes.$class("subheader with-divider")]),
+              _U.list([$Html.text("Other material")]))]))]));
    });
    var update = F2(function (action,model) {
       var _p0 = action;
       return model;
    });
    var NoOp = {ctor: "NoOp"};
-   var init = {materials: _U.list([])};
-   var Model = function (a) {    return {materials: a};};
-   var Material = F2(function (a,b) {
-      return {name: a,isSelected: b};
+   var init = {selectedMaterials: _U.list([])
+              ,featuredMaterials: _U.list([])
+              ,otherMaterials: _U.list([])};
+   var Model = F3(function (a,b,c) {
+      return {selectedMaterials: a
+             ,featuredMaterials: b
+             ,otherMaterials: c};
    });
    return _elm.Component.MaterialFilter.values = {_op: _op
                                                  ,init: init
@@ -11943,14 +11969,15 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
    });
    var NoOp = {ctor: "NoOp"};
    var actions = $Signal.mailbox(NoOp);
-   var Model = F7(function (a,b,c,d,e,f,g) {
+   var Model = F8(function (a,b,c,d,e,f,g,h) {
       return {products: a
              ,palette: b
              ,visibleFilter: c
              ,colourFilter: d
              ,materialFilter: e
              ,productFilter: f
-             ,styleFilter: g};
+             ,styleFilter: g
+             ,filteringComplete: h};
    });
    var Style = {ctor: "Style"};
    var Product = {ctor: "Product"};
@@ -11960,10 +11987,13 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
       var _p1 = action;
       switch (_p1.ctor)
       {case "NoOp": return model;
-         case "ColourFilterActions": return _U.update(model,
-           {colourFilter: A2($Component$ColourFilter.update,
+         case "ColourFilterActions":
+         var colourFilter = A2($Component$ColourFilter.update,
            _p1._0,
-           model.colourFilter)});
+           model.colourFilter);
+           var complete = colourFilter.filteringComplete;
+           return _U.update(model,
+           {colourFilter: colourFilter,filteringComplete: complete});
          case "MaterialFilterActions": return _U.update(model,
            {materialFilter: A2($Component$MaterialFilter.update,
            _p1._0,
@@ -11996,7 +12026,8 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
              featuredPalette)
              ,materialFilter: $Component$MaterialFilter.init
              ,productFilter: $Component$ProductFilter.init
-             ,styleFilter: $Component$StyleFilter.init};
+             ,styleFilter: $Component$StyleFilter.init
+             ,filteringComplete: false};
    });
    var model = F3(function (products,
    selectedPalette,
@@ -12043,8 +12074,11 @@ Elm.Component.SmartFeed.make = function (_elm) {
            _p0._0,
            model.tileDetail);
            var colourFilter = {colour: tileDetail.colourFilter.selectedPalette};
+           var showTileDetail = !_U.eq(tileDetail.filteringComplete,true);
            return _U.update(model,
-           {tileDetail: tileDetail,filter: colourFilter});
+           {tileDetail: tileDetail
+           ,filter: colourFilter
+           ,isTileDetailView: showTileDetail});
          case "ShowTileDetail": var _p1 = _p0._0;
            var tileDetail = A3($Component$SmartFeedTileDetail.init,
            _p1.products,
@@ -12094,7 +12128,7 @@ Elm.Component.SmartFeed.make = function (_elm) {
                       _U.list([A2($Html.button,
                       _U.list([$Html$Attributes.$class("btn-light")
                               ,A2($Html$Events.onClick,address,HideTileDetail)]),
-                      _U.list([$Html.text("Back to feed")]))]))
+                      _U.list([$Html.text("Back")]))]))
                       ,A2($Component$SmartFeedTileDetail.view,
                       A2($Signal.forwardTo,address,TileDetail),
                       model.tileDetail)])) : A2($Html.div,_U.list([]),_U.list([]))]));

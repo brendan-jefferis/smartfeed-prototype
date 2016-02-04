@@ -152,10 +152,12 @@ update action model =
       let
         tileDetail = TileDetail.update act model.tileDetail
         colourFilter = { colour = tileDetail.colourFilter.selectedPalette }
+        showTileDetail = tileDetail.filteringComplete /= True
       in
         { model |
             tileDetail = tileDetail
           , filter = colourFilter
+          , isTileDetailView = showTileDetail
         }
 
     ShowTileDetail tile ->
@@ -211,7 +213,7 @@ view address model =
               [ button
                 [ class "btn-light"
                 , onClick address HideTileDetail ]
-                [ text "Back to feed" ]
+                [ text "Back" ]
               ]
           , TileDetail.view (Signal.forwardTo address TileDetail) model.tileDetail
           ]

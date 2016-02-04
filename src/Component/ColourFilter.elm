@@ -48,6 +48,8 @@ type alias Model =
   { featuredPalette : Palette
   , otherPalettes : List Palette
   , selectedPalette : Palette
+  , tempPalette : Palette
+  , filteringComplete : Bool
   }
 
 init : Palette -> Palette -> Model
@@ -55,6 +57,8 @@ init selectedPalette featuredPalette =
   { featuredPalette = featuredPalette
   , otherPalettes = dummyOtherPalettes
   , selectedPalette = selectedPalette
+  , tempPalette = selectedPalette
+  , filteringComplete = False
   }
 
 
@@ -67,6 +71,7 @@ type Action
   | SelectColour PaletteColour
   | DeselectColor PaletteColour
   | ClearSelectedPalette
+  | SaveAndContinue
 
 update : Action -> Model -> Model
 update action model =
@@ -76,34 +81,40 @@ update action model =
 
     SelectColour paletteColour ->
       let
-        selectedPalette = model.selectedPalette
+        tempPalette = model.tempPalette
         updatedPalette =
-          if (List.member paletteColour model.selectedPalette.colours) then
-            selectedPalette
+          if (List.member paletteColour model.tempPalette.colours) then
+            tempPalette
           else
-            { selectedPalette |
-                colours = paletteColour :: model.selectedPalette.colours
+            { tempPalette |
+                colours = paletteColour :: model.tempPalette.colours
             }
       in
         { model |
-            selectedPalette = updatedPalette
+            tempPalette = updatedPalette
         }
 
     DeselectColor paletteColour ->
       let
-        selectedPalette = model.selectedPalette
+        tempPalette = model.tempPalette
         updatedPalette =
-          { selectedPalette |
-              colours = List.filter (\c -> c /= paletteColour) selectedPalette.colours
+          { tempPalette |
+              colours = List.filter (\c -> c /= paletteColour) tempPalette.colours
           }
       in
         { model |
-            selectedPalette = updatedPalette
+            tempPalette = updatedPalette
         }
 
     ClearSelectedPalette ->
       { model |
-          selectedPalette = { name = Nothing, colours = [] }
+          tempPalette = Common.Alias.emptyPalette
+      }
+
+    SaveAndContinue ->
+      { model |
+          selectedPalette = model.tempPalette
+        , filteringComplete = True
       }
 
 
@@ -155,8 +166,8 @@ paletteList address selectedPalette palette =
 view : Signal.Address Action -> Model -> Html
 view address model =
   let
+    selectedPaletteCellCount = List.length model.tempPalette.colours
     featuredPaletteCellCount = List.length model.featuredPalette.colours
-    selectedPaletteCellCount = List.length model.selectedPalette.colours
   in
     div
       [ class "filter-panel colour-filter" ]
@@ -168,7 +179,7 @@ view address model =
                 [ text "Your current palette" ]
             , ul
                 [ class "blank colour-palette" ]
-                (List.map (colourCell address selectedPaletteCellCount model.selectedPalette.colours) model.selectedPalette.colours)
+                (List.map (colourCell address selectedPaletteCellCount model.tempPalette.colours) model.tempPalette.colours)
             , button
                 [ class "btn-small secondary"
                 , onClick address ClearSelectedPalette ]
@@ -194,4 +205,10 @@ view address model =
       , ul
           [ class "blank" ]
           (List.map (paletteList address model.selectedPalette) model.otherPalettes)
+      , div
+          [ class "content-right" ]
+          [ button
+              [ onClick address SaveAndContinue ]
+              [ text "Save and continue"]
+          ]
       ]

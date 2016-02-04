@@ -29,6 +29,7 @@ type alias Model =
   , materialFilter : MaterialFilter.Model
   , productFilter : ProductFilter.Model
   , styleFilter : StyleFilter.Model
+  , filteringComplete : Bool
   }
 
 init : List Product -> Palette -> Palette -> Model
@@ -40,6 +41,7 @@ init products selectedPalette featuredPalette =
   , materialFilter = MaterialFilter.init
   , productFilter = ProductFilter.init
   , styleFilter = StyleFilter.init
+  , filteringComplete = False
   }
 
 
@@ -65,9 +67,14 @@ update action model =
       model
 
     ColourFilterActions act ->
-      { model |
-          colourFilter = ColourFilter.update act model.colourFilter
-      }
+      let
+        colourFilter = ColourFilter.update act model.colourFilter
+        complete = colourFilter.filteringComplete
+      in
+        { model |
+            colourFilter = colourFilter
+          , filteringComplete = complete
+        }
 
     MaterialFilterActions act ->
       { model |

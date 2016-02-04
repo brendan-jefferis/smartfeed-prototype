@@ -34,3 +34,6 @@ ul.blank {
   margin: 0;
   padding: 0;
   list-style: none; }
+
+.content-right {
+  text-align: right; }

@@ -43,3 +43,7 @@ button {
 ul.blank {
 	@include blank-list();
 }
+
+.content-right {
+	text-align: right;
+}
