@@ -8,6 +8,7 @@ import Component.ColourFilter as ColourFilter
 import Component.MaterialFilter as MaterialFilter
 import Component.ProductFilter as ProductFilter
 import Component.StyleFilter as StyleFilter
+import Component.SmartFeedTile as Tile
 import Common.Alias exposing (Product, Palette)
 
 
@@ -32,12 +33,12 @@ type alias Model =
   , filteringComplete : Bool
   }
 
-init : List Product -> Palette -> Palette -> Model
-init products selectedPalette featuredPalette =
-  { products = products
-  , palette = featuredPalette
+init : Tile.Model -> Palette -> Model
+init tile selectedPalette =
+  { products = tile.products
+  , palette = tile.palette
   , visibleFilter = None
-  , colourFilter = ColourFilter.init selectedPalette featuredPalette -- pass down colour palette here
+  , colourFilter = ColourFilter.init selectedPalette tile.palette
   , materialFilter = MaterialFilter.init
   , productFilter = ProductFilter.init
   , styleFilter = StyleFilter.init
@@ -209,7 +210,7 @@ view address model =
 
 
 
-
+{-
 --======================================| SIGNALS |
 
 actions : Signal.Mailbox Action
@@ -217,5 +218,6 @@ actions =
   Signal.mailbox NoOp
 
 model : List Product -> Palette -> Palette -> Signal Model
-model products selectedPalette featuredPalette =
+model tile selectedPalette =
   Signal.foldp update (init products selectedPalette featuredPalette) actions.signal
+-}

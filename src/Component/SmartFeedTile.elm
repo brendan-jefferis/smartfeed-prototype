@@ -31,7 +31,7 @@ init =
   , isFavourite = False
   , url = ""
   , products = []
-  , palette = { name = Nothing, colours = [] }
+  , palette = Common.Alias.emptyPalette
   }
 
 

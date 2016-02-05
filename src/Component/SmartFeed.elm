@@ -125,7 +125,7 @@ init : Model
 init =
   { tiles = dummyTiles
   , isTileDetailView = False
-  , tileDetail = TileDetail.init [] emptyPalette emptyPalette
+  , tileDetail = TileDetail.init Tile.init Common.Alias.emptyPalette
   , filter =
       { colour = emptyPalette
       }
@@ -162,7 +162,7 @@ update action model =
 
     ShowTileDetail tile ->
       let
-        tileDetail = TileDetail.init tile.products model.filter.colour tile.palette
+        tileDetail = TileDetail.init tile model.filter.colour
       in
         { model |
             isTileDetailView = True
@@ -172,7 +172,7 @@ update action model =
     HideTileDetail ->
       { model |
           isTileDetailView = False
-        , tileDetail = TileDetail.init [] emptyPalette emptyPalette
+        , tileDetail = TileDetail.init Tile.init Common.Alias.emptyPalette
       }
 
 
