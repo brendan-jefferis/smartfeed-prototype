@@ -3,7 +3,7 @@ module Component.SmartFeedTile (Model, init, view) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 
-import Common.Alias exposing (Palette, Product)
+import Common.Alias exposing (Palette, Material, Product)
 
 
 
@@ -19,6 +19,7 @@ type alias Model =
   , url : String
   , products : List Product
   , palette : Palette
+  , materials : List Material
   }
 
 init : Model
@@ -32,6 +33,7 @@ init =
   , url = ""
   , products = []
   , palette = Common.Alias.emptyPalette
+  , materials = Common.Alias.emptyMaterials
   }
 
 

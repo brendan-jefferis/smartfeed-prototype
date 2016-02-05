@@ -24,3 +24,17 @@ type alias Product =
   , thumbnailUrl : String
   , url : String
   }
+
+type alias Material =
+  { name : String
+  , modifier : Maybe String
+  }
+
+type alias MaterialSelector =
+  { name : String
+  , modifiers : List String
+  }
+
+emptyMaterials : List Material
+emptyMaterials =
+  [ { name = "", modifier = Nothing } ]

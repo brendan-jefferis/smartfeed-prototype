@@ -95,6 +95,7 @@ dummyTiles =
     , url = "/tile/1"
     , products = dummyProductsOne
     , palette = { name = Nothing, colours = [ { name = "Black", hex = "#1A1611" }, { name = "Grey", hex = "#D3D0CB" }, { name = "", hex = "#ABA49A" }, { name = "White", hex = "#FFFFFF" }, { name = "Brown", hex = "#543822" }, { name = "Fawn", hex = "#AC9C82" }] }
+    , materials = [{name = "Fabric", modifier = Just "Cotton" }, {name = "Metal", modifier = Just "Brass"}, {name = "Wood", modifier = Just "Light"}]
     }
   , { tileId = 2
     , brand = "Freedom Furniture"
@@ -105,6 +106,7 @@ dummyTiles =
     , url = "/tile/2"
     , products = dummyProductsTwo
     , palette = { name = Nothing, colours = [{ name = "Midnight", hex = "#211F20"}, {name = "Slate", hex = "#47464B"}, {name = "Light Cyan", hex = "#7ED3D0"}, {name = "Brick", hex = "#CA3727"}, {name = "Lemon tree", hex = "#E3CD2A"}] }
+    , materials = [{name = "Leather", modifier = Nothing}, {name = "Metal", modifier = Just "Brushed"}, {name = "Fabric", modifier = Just "Linen"}, {name = "wood", modifier = Nothing}]
     }
   ]
 
