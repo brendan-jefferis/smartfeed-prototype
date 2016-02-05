@@ -1,5 +1,9 @@
 module Common.Alias (..) where
 
+type alias Filter =
+  { colour : Palette
+  }
+
 type alias PaletteColour =
   { name : String
   , hex : String

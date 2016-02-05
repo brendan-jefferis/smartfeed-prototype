@@ -112,15 +112,11 @@ dummyTiles =
 
 --======================================| MODEL |
 
-type alias Filter =
-  { colour : Palette
-  }
-
 type alias Model =
   { tiles : List Tile.Model
   , isTileDetailView : Bool
   , tileDetail : TileDetail.Model
-  , filter : Filter
+  , filter : Common.Alias.Filter
   }
 
 init : Model

@@ -15,7 +15,7 @@ import Common.Alias exposing (Product, Palette)
 
 --======================================| MODEL |
 
-type Filter
+type FilterType
   = None
   | Colour
   | Material
@@ -25,7 +25,7 @@ type Filter
 type alias Model =
   { products : List Product
   , palette : Palette
-  , visibleFilter : Filter
+  , visibleFilter : FilterType
   , colourFilter : ColourFilter.Model
   , materialFilter : MaterialFilter.Model
   , productFilter : ProductFilter.Model
