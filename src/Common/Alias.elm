@@ -2,6 +2,13 @@ module Common.Alias (..) where
 
 type alias Filter =
   { colour : Palette
+  , material : List Material
+  }
+
+emptyFilter : Filter
+emptyFilter =
+  { colour = emptyPalette
+  , material = emptyMaterials
   }
 
 type alias PaletteColour =

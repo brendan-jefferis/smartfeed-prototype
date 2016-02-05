@@ -6,11 +6,11 @@ import Html.Attributes exposing (..)
 view : String -> Bool -> Html
 view label checked =
   div
-    [ class "check-row" ]
+    [ class "check-row clickable" ]
     [ span
         [ ]
         [ text label ]
-    , span
+    , i
+        [ class (if checked then "fa fa-check-square-o" else "fa fa-square-o") ]
         [ ]
-        [ text (toString checked)]
     ]

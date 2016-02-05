@@ -2,18 +2,19 @@ module Component.MaterialFilter (Model, init, Action, update, view) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 
 import Common.Alias exposing (Material, MaterialSelector)
 import Common.CheckRow as CheckRow
 
 --======================================| DUMMY DATA |
 
-dummyOtherMaterials : List MaterialSelector
-dummyOtherMaterials =
-  [ { name = "Wood", modifiers = ["", "Light", "Dark", "Rustic"] }
-  , { name = "Metal", modifiers = ["", "Painted", "Brushed", "Chrome", "Brass", "Vintage"] }
-  , { name = "Fabric", modifiers = ["", "Linen", "Wool", "Cotton", "Synthetic", "Macrosuede"] }
-  , { name = "Leather", modifiers = [ "", "Suede", "Artificial", "Full-grain", "Nubick", "Patent", "Deerskin", "Top-grain", "Reptile/marine" ] }
+dummyMaterials : List Material
+dummyMaterials =
+  [ { name = "Wood", modifier = Just ""}
+  , { name = "Metal", modifier = Just "" }
+  , { name = "Fabric", modifier = Just "" }
+  , { name = "Leather", modifier = Just ""}
   ]
 
 --======================================| MODEL |
@@ -22,15 +23,15 @@ type alias Model =
   { selectedMaterials : List Material
   , featuredMaterials : List Material
   , otherMaterials : List Material
-  , tempMaterials : List Material
+  , filteringComplete : Bool
   }
 
-init : List Material -> Model
-init featuredMaterials =
-  { selectedMaterials = []
+init : List Material -> List Material -> Model
+init selectedMaterials featuredMaterials =
+  { selectedMaterials = selectedMaterials
   , featuredMaterials = featuredMaterials
-  , otherMaterials = []
-  , tempMaterials = []
+  , otherMaterials = dummyMaterials
+  , filteringComplete = False
   }
 
 
@@ -38,7 +39,11 @@ init featuredMaterials =
 
 --======================================| UPDATE |
 
-type Action = NoOp
+type Action
+  = NoOp
+  | SelectMaterial Material
+  | DeselectMaterial Material
+  | Clear
 
 update : Action -> Model -> Model
 update action model =
@@ -46,13 +51,34 @@ update action model =
     NoOp ->
       model
 
+    SelectMaterial material ->
+      let
+        updatedMaterials =
+          if (List.member material model.selectedMaterials) then
+            model.selectedMaterials
+          else
+            material  :: model.selectedMaterials
+      in
+        { model |
+            selectedMaterials = updatedMaterials
+        }
+
+    DeselectMaterial material ->
+      { model |
+          selectedMaterials = List.filter (\c -> c /= material) model.selectedMaterials
+      }
+
+    Clear ->
+      { model |
+          selectedMaterials = []
+      }
 
 
 
 --======================================| VIEW |
 
-listItem : Material -> Html
-listItem material =
+listItem : Signal.Address Action -> List Material -> Material -> Html
+listItem address selectedMaterials material =
   let
     label =
       case material.modifier of
@@ -60,18 +86,41 @@ listItem material =
           val ++ " " ++ material.name
 
         Nothing ->
-          material.name 
+          material.name
+
+    checked = List.member material selectedMaterials
+    clickAction = if checked then DeselectMaterial else SelectMaterial
   in
-    CheckRow.view label False
+    li
+      [ onClick address (clickAction material) ]
+      [ CheckRow.view label checked ]
 
 view : Signal.Address Action -> Model -> Html
 view address model =
   let
+    selectedMaterialsCount = List.length model.selectedMaterials
     featuredMaterialsCount = List.length model.featuredMaterials
   in
     div
       [ class "filter-panel material-filter" ]
-      [ if featuredMaterialsCount > 0 then
+      [ if selectedMaterialsCount > 0 then
+          div
+            [ ]
+            [ h6
+                [ class "subheader" ]
+                [ text "Your current materials" ]
+            , ul
+                [ class "blank materials" ]
+                (List.map (listItem address model.selectedMaterials) model.selectedMaterials)
+            , button
+                [ class "btn-small secondary"
+                , onClick address Clear
+                ]
+                [ text "Clear all" ]
+            ]
+        else 
+          div [] []
+      , if featuredMaterialsCount > 0 then
           div
             [ ]
             [ h6
@@ -79,11 +128,14 @@ view address model =
                 [ text "Materials featured in these products" ]
             , ul
                 [ class "blank materials" ]
-                (List.map listItem model.featuredMaterials)
+                (List.map (listItem address model.selectedMaterials) model.featuredMaterials)
             , h6
               [ class "subheader with-divider" ]
               [ text "Other materials" ]
             ]
         else
           div [] []
+      , ul
+          [ class "blank" ]
+          (List.map (listItem address model.selectedMaterials) model.otherMaterials)
       ]

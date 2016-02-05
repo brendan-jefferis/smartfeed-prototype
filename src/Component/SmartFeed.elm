@@ -106,7 +106,7 @@ dummyTiles =
     , url = "/tile/2"
     , products = dummyProductsTwo
     , palette = { name = Nothing, colours = [{ name = "Midnight", hex = "#211F20"}, {name = "Slate", hex = "#47464B"}, {name = "Light Cyan", hex = "#7ED3D0"}, {name = "Brick", hex = "#CA3727"}, {name = "Lemon tree", hex = "#E3CD2A"}] }
-    , materials = [{name = "Leather", modifier = Nothing}, {name = "Metal", modifier = Just "Brushed"}, {name = "Fabric", modifier = Just "Linen"}, {name = "wood", modifier = Nothing}]
+    , materials = [{name = "Leather", modifier = Nothing}, {name = "Metal", modifier = Just "Brushed"}, {name = "Fabric", modifier = Just "Linen"}, {name = "Wood", modifier = Nothing}]
     }
   ]
 
@@ -123,9 +123,10 @@ init : Model
 init =
   { tiles = dummyTiles
   , isTileDetailView = False
-  , tileDetail = TileDetail.init Tile.init Common.Alias.emptyPalette
+  , tileDetail = TileDetail.init Tile.init Common.Alias.emptyFilter
   , filter =
-      { colour = emptyPalette
+      { colour = Common.Alias.emptyPalette
+      , material = []
       }
   }
 
@@ -149,18 +150,23 @@ update action model =
     TileDetail act ->
       let
         tileDetail = TileDetail.update act model.tileDetail
-        colourFilter = { colour = tileDetail.colourFilter.selectedPalette }
+        filter = model.filter
+        updatedFilter =
+          { filter |
+              colour = tileDetail.colourFilter.selectedPalette
+            , material = tileDetail.materialFilter.selectedMaterials
+          }
         showTileDetail = tileDetail.filteringComplete /= True
       in
         { model |
             tileDetail = tileDetail
-          , filter = colourFilter
+          , filter = if tileDetail.filteringComplete then updatedFilter else model.filter
           , isTileDetailView = showTileDetail
         }
 
     ShowTileDetail tile ->
       let
-        tileDetail = TileDetail.init tile model.filter.colour
+        tileDetail = TileDetail.init tile model.filter
       in
         { model |
             isTileDetailView = True
@@ -170,7 +176,7 @@ update action model =
     HideTileDetail ->
       { model |
           isTileDetailView = False
-        , tileDetail = TileDetail.init Tile.init Common.Alias.emptyPalette
+        , tileDetail = TileDetail.init Tile.init Common.Alias.emptyFilter
       }
 
 
@@ -218,17 +224,3 @@ view address model =
       else
         div [] []
     ]
-
-
-
-
---======================================| SIGNALS |
-
-actions : Signal.Mailbox Action
-actions =
-  Signal.mailbox NoOp
-
-
-model : Signal Model
-model =
-  Signal.foldp update init actions.signal

@@ -34,6 +34,37 @@ $icon-size: 18px;
 		}
 	}
 
+	.check-row {
+		height: 48px;
+		line-height: 48px;
+		border-bottom: 1px solid #ccc;
+		background: #fff;
+		padding: 0 8px;
+		position: relative;
+
+		&.clickable {
+			cursor: pointer;
+		}
+		
+		span {
+			font-size: 16px;
+			color: $default-color;
+		}
+
+		i {
+			font-size: 24px;
+			vertical-align: middle;
+			position: absolute;
+			right: 12px;
+			top: 14px;
+			color: #999;
+
+			&.fa-check-square-o {
+				right: 8px;
+			}
+		}
+	}
+
 	.scrollable-list {
 		height: 100%;
 		overflow: auto;

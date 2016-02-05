@@ -26,6 +26,7 @@ type alias Model =
   { products : List Product
   , palette : Palette
   , visibleFilter : FilterType
+  , filter : Common.Alias.Filter
   , colourFilter : ColourFilter.Model
   , materialFilter : MaterialFilter.Model
   , productFilter : ProductFilter.Model
@@ -33,13 +34,14 @@ type alias Model =
   , filteringComplete : Bool
   }
 
-init : Tile.Model -> Palette -> Model
-init tile selectedPalette =
+init : Tile.Model -> Common.Alias.Filter -> Model
+init tile filter =
   { products = tile.products
   , palette = tile.palette
   , visibleFilter = None
-  , colourFilter = ColourFilter.init selectedPalette tile.palette
-  , materialFilter = MaterialFilter.init tile.materials
+  , filter = filter
+  , colourFilter = ColourFilter.init filter.colour tile.palette
+  , materialFilter = MaterialFilter.init filter.material tile.materials
   , productFilter = ProductFilter.init
   , styleFilter = StyleFilter.init
   , filteringComplete = False
@@ -60,6 +62,7 @@ type Action
   | ShowMaterialFilter
   | ShowProductFilter
   | ShowStyleFilter
+  | SaveAndContinue
 
 update : Action -> Model -> Model
 update action model =
@@ -68,14 +71,9 @@ update action model =
       model
 
     ColourFilterActions act ->
-      let
-        colourFilter = ColourFilter.update act model.colourFilter
-        complete = colourFilter.filteringComplete
-      in
-        { model |
-            colourFilter = colourFilter
-          , filteringComplete = complete
-        }
+      { model |
+          colourFilter = ColourFilter.update act model.colourFilter
+      }
 
     MaterialFilterActions act ->
       { model |
@@ -112,6 +110,17 @@ update action model =
           visibleFilter = Style
       }
 
+    SaveAndContinue ->
+      let
+        updatedFilter =
+          { colour = model.colourFilter.selectedPalette
+          , material = model.materialFilter.selectedMaterials
+          }
+      in
+      { model |
+          filter = updatedFilter
+        , filteringComplete = True
+      }
 
 
 
@@ -196,6 +205,15 @@ filterView address model =
               [ text "Style" ]
           ]
       , currentFilter
+      , if model.visibleFilter /= None then
+          div
+              [ class "content-right" ]
+              [ button
+                  [ onClick address SaveAndContinue ]
+                  [ text "Save and continue"]
+              ]
+        else 
+          div [] []
       ]
 
 view : Signal.Address Action -> Model -> Html
@@ -207,17 +225,3 @@ view address model =
       (List.map (productView address) model.products)
     , (filterView address model)
     ]
-
-
-
-{-
---======================================| SIGNALS |
-
-actions : Signal.Mailbox Action
-actions =
-  Signal.mailbox NoOp
-
-model : List Product -> Palette -> Palette -> Signal Model
-model tile selectedPalette =
-  Signal.foldp update (init products selectedPalette featuredPalette) actions.signal
--}
