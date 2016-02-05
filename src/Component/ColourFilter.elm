@@ -195,7 +195,7 @@ view address model =
                 [ text "Colours found in this look" ]
             , ul
                 [ class "blank colour-palette" ]
-                (List.map (colourCell address featuredPaletteCellCount model.selectedPalette.colours) model.featuredPalette.colours)
+                (List.map (colourCell address featuredPaletteCellCount model.tempPalette.colours) model.featuredPalette.colours)
             , h6
               [ class "subheader with-divider" ]
               [ text "Other palettes" ]
@@ -204,7 +204,7 @@ view address model =
           div [] []
       , ul
           [ class "blank" ]
-          (List.map (paletteList address model.selectedPalette) model.otherPalettes)
+          (List.map (paletteList address model.tempPalette) model.otherPalettes)
       , div
           [ class "content-right" ]
           [ button
