@@ -23,6 +23,7 @@ dummyProductsOne =
     , photoUrl = "/images/product/dahlia-sofa.png"
     , thumbnailUrl = "/images/thumbnail/dahlia-sofa.png"
     , url = "/products/1"
+    , category = "Sofas"
     }
   , { title = "Product 2"
     , description = "This is the second product"
@@ -32,6 +33,7 @@ dummyProductsOne =
     , photoUrl = "/images/product/brass-lamp.png"
     , thumbnailUrl = "/images/thumbnail/brass-lamp.png"
     , url = "/products/2"
+    , category = "Lamps"
     }
   , { title = "Product 3"
     , description = "This is the third product"
@@ -41,6 +43,7 @@ dummyProductsOne =
     , photoUrl = "/images/product/fern.png"
     , thumbnailUrl = "/images/thumbnail/fern.png"
     , url = "/products/3"
+    , category = "Indoor plants"
     }
   , { title = "Product 3"
     , description = "This is the third product"
@@ -50,6 +53,7 @@ dummyProductsOne =
     , photoUrl = "/images/product/ceiling-light.png"
     , thumbnailUrl = "/images/thumbnail/ceiling-light.png"
     , url = "/products/4"
+    , category = "Ceiling lights"
     }
   ]
 
@@ -63,6 +67,7 @@ dummyProductsTwo =
     , photoUrl = "/images/product/leather-sofa.png"
     , thumbnailUrl = "/images/thumbnail/leather-sofa.png"
     , url = "/products/5"
+    , category = "Sofas"
     }
   , { title = "Product 5"
     , description = "This is the fifth product"
@@ -72,6 +77,7 @@ dummyProductsTwo =
     , photoUrl = "/images/product/drum-table.png"
     , thumbnailUrl = "/images/thumbnail/drum-table.png"
     , url = "/products/6"
+    , category = "Coffee tables"
     }
   , { title = "Mariner Floor Lamp"
     , description = "Stylish floor lamp with nautical theme."
@@ -81,6 +87,7 @@ dummyProductsTwo =
     , photoUrl = "/images/product/nautical-lamp.png"
     , thumbnailUrl = "/images/thumbnail/nautical-lamp.png"
     , url = "/products/7"
+    , category = "Lamps"
     }
   ]
 
@@ -127,6 +134,7 @@ init =
   , filter =
       { colour = Common.Alias.emptyPalette
       , material = []
+      , category = []
       }
   }
 
@@ -155,6 +163,7 @@ update action model =
           { filter |
               colour = tileDetail.colourFilter.selectedPalette
             , material = tileDetail.materialFilter.selectedMaterials
+            , category = tileDetail.productFilter.selectedCategories
           }
         showTileDetail = tileDetail.filteringComplete /= True
       in

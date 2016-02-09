@@ -3,12 +3,14 @@ module Common.Alias (..) where
 type alias Filter =
   { colour : Palette
   , material : List Material
+  , category : List String
   }
 
 emptyFilter : Filter
 emptyFilter =
   { colour = emptyPalette
   , material = emptyMaterials
+  , category = []
   }
 
 type alias PaletteColour =
@@ -34,6 +36,7 @@ type alias Product =
   , photoUrl : String
   , thumbnailUrl : String
   , url : String
+  , category : String
   }
 
 type alias Material =
