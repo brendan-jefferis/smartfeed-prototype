@@ -65,6 +65,67 @@ $icon-size: 18px;
 		}
 	}
 
+	.tag {
+		padding: 6px 8px;
+		background: $light-grey;
+		border-radius: 2px;
+		display: inline-block;
+		margin-right: 6px;
+		
+		span,
+		i {
+			color: $default-color;
+		}
+
+		i {
+			font-size: 18px;
+			vertical-align: middle;
+			cursor: pointer;
+			margin-left: 6px;
+		}
+	}
+
+	.active-filter {
+		position: absolute;
+		width: 100%;
+
+		.active-filter-bar {
+			background: #222;
+			padding: 6px;
+			min-height: 36px;
+
+			.status-indicator {
+				font-style: italic;
+				font-weight: bold;
+				color: $light-grey;
+				line-height: 26px;
+			}
+
+			button {
+				position: absolute;
+				right: 6px;
+			}
+
+			.filter-panel {
+				color: $light-grey;
+				padding: 10px 8px;
+				margin-top: 6px;
+
+				li {
+					display: inline-block;
+				}
+
+				.subheader {
+					color: #999;
+
+					&:not(:first-of-type) {
+						margin-top: 18px;
+					}
+				}
+			}
+		}
+	}
+
 	.scrollable-list {
 		height: 100%;
 		overflow: auto;

@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 
+import Component.ActiveFilterPanel as ActiveFilterPanel
 import Component.SmartFeedTile as Tile
 import Component.SmartFeedTileDetail as TileDetail
 import Common.Alias exposing (Product, Palette, emptyPalette)
@@ -125,6 +126,7 @@ type alias Model =
   { tiles : List Tile.Model
   , isTileDetailView : Bool
   , tileDetail : TileDetail.Model
+  , activeFilterPanel : ActiveFilterPanel.Model 
   , filter : Common.Alias.Filter
   }
 
@@ -133,12 +135,8 @@ init =
   { tiles = dummyTiles
   , isTileDetailView = False
   , tileDetail = TileDetail.init Tile.init Common.Alias.emptyFilter
-  , filter =
-      { colour = Common.Alias.emptyPalette
-      , material = []
-      , category = []
-      , style = []
-      }
+  , activeFilterPanel = ActiveFilterPanel.init Common.Alias.emptyFilter
+  , filter = Common.Alias.emptyFilter
   }
 
 
@@ -151,6 +149,7 @@ type Action
   | TileDetail TileDetail.Action
   | ShowTileDetail Tile.Model
   | HideTileDetail
+  | ActiveFilterPanelActions ActiveFilterPanel.Action
 
 update : Action -> Model -> Model
 update action model =
@@ -174,6 +173,7 @@ update action model =
         { model |
             tileDetail = tileDetail
           , filter = if tileDetail.filteringComplete then updatedFilter else model.filter
+          , activeFilterPanel = ActiveFilterPanel.init updatedFilter
           , isTileDetailView = showTileDetail
         }
 
@@ -190,6 +190,11 @@ update action model =
       { model |
           isTileDetailView = False
         , tileDetail = TileDetail.init Tile.init Common.Alias.emptyFilter
+      }
+
+    ActiveFilterPanelActions act ->
+      { model |
+          activeFilterPanel = ActiveFilterPanel.update act model.activeFilterPanel
       }
 
 
@@ -216,6 +221,7 @@ view address model =
             [ ]
             [ text ("Filter: " ++ (toString model.filter)) ]
         ]
+    , ActiveFilterPanel.view (Signal.forwardTo address ActiveFilterPanelActions) model.activeFilterPanel
     , div
         [ class "scrollable-list" ]
         [ ul

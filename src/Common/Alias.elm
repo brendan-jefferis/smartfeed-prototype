@@ -10,7 +10,7 @@ type alias Filter =
 emptyFilter : Filter
 emptyFilter =
   { colour = emptyPalette
-  , material = emptyMaterials
+  , material = []
   , category = []
   , style = []
   }

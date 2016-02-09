@@ -35,6 +35,45 @@
       color: #999; }
       .smart-feed .check-row i.fa-check-square-o {
         right: 8px; }
+  .smart-feed .tag {
+    padding: 6px 8px;
+    background: #f3f3f3;
+    border-radius: 2px;
+    display: inline-block;
+    margin-right: 6px; }
+    .smart-feed .tag span,
+    .smart-feed .tag i {
+      color: #444; }
+    .smart-feed .tag i {
+      font-size: 18px;
+      vertical-align: middle;
+      cursor: pointer;
+      margin-left: 6px; }
+  .smart-feed .active-filter {
+    position: absolute;
+    width: 100%; }
+    .smart-feed .active-filter .active-filter-bar {
+      background: #222;
+      padding: 6px;
+      min-height: 36px; }
+      .smart-feed .active-filter .active-filter-bar .status-indicator {
+        font-style: italic;
+        font-weight: bold;
+        color: #f3f3f3;
+        line-height: 26px; }
+      .smart-feed .active-filter .active-filter-bar button {
+        position: absolute;
+        right: 6px; }
+      .smart-feed .active-filter .active-filter-bar .filter-panel {
+        color: #f3f3f3;
+        padding: 10px 8px;
+        margin-top: 6px; }
+        .smart-feed .active-filter .active-filter-bar .filter-panel li {
+          display: inline-block; }
+        .smart-feed .active-filter .active-filter-bar .filter-panel .subheader {
+          color: #999; }
+          .smart-feed .active-filter .active-filter-bar .filter-panel .subheader:not(:first-of-type) {
+            margin-top: 18px; }
   .smart-feed .scrollable-list {
     height: 100%;
     overflow: auto;
