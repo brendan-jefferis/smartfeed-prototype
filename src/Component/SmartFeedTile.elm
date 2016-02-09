@@ -20,6 +20,7 @@ type alias Model =
   , products : List Product
   , palette : Palette
   , materials : List Material
+  , styles : List String
   }
 
 init : Model
@@ -34,6 +35,7 @@ init =
   , products = []
   , palette = Common.Alias.emptyPalette
   , materials = Common.Alias.emptyMaterials
+  , styles = []
   }
 
 

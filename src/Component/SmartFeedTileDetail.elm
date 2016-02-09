@@ -43,7 +43,7 @@ init tile filter =
   , colourFilter = ColourFilter.init filter.colour tile.palette
   , materialFilter = MaterialFilter.init filter.material tile.materials
   , productFilter = ProductFilter.init filter.category (List.map .category tile.products)
-  , styleFilter = StyleFilter.init
+  , styleFilter = StyleFilter.init filter.style tile.styles
   , filteringComplete = False
   }
 
@@ -116,6 +116,7 @@ update action model =
           { colour = model.colourFilter.selectedPalette
           , material = model.materialFilter.selectedMaterials
           , category = model.productFilter.selectedCategories
+          , style = model.styleFilter.selectedStyles
           }
       in
       { model |

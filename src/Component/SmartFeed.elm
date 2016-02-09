@@ -103,6 +103,7 @@ dummyTiles =
     , products = dummyProductsOne
     , palette = { name = Nothing, colours = [ { name = "Black", hex = "#1A1611" }, { name = "Grey", hex = "#D3D0CB" }, { name = "", hex = "#ABA49A" }, { name = "White", hex = "#FFFFFF" }, { name = "Brown", hex = "#543822" }, { name = "Fawn", hex = "#AC9C82" }] }
     , materials = [{name = "Fabric", modifier = Just "Cotton" }, {name = "Metal", modifier = Just "Brass"}, {name = "Wood", modifier = Just "Light"}]
+    , styles = ["Scandinavian", "Bohemian"]
     }
   , { tileId = 2
     , brand = "Freedom Furniture"
@@ -114,6 +115,7 @@ dummyTiles =
     , products = dummyProductsTwo
     , palette = { name = Nothing, colours = [{ name = "Midnight", hex = "#211F20"}, {name = "Slate", hex = "#47464B"}, {name = "Light Cyan", hex = "#7ED3D0"}, {name = "Brick", hex = "#CA3727"}, {name = "Lemon tree", hex = "#E3CD2A"}] }
     , materials = [{name = "Leather", modifier = Nothing}, {name = "Metal", modifier = Just "Brushed"}, {name = "Fabric", modifier = Just "Linen"}, {name = "Wood", modifier = Nothing}]
+    , styles = ["Contemporary", "Industrial modern", "Vintage"]
     }
   ]
 
@@ -135,6 +137,7 @@ init =
       { colour = Common.Alias.emptyPalette
       , material = []
       , category = []
+      , style = []
       }
   }
 
@@ -164,6 +167,7 @@ update action model =
               colour = tileDetail.colourFilter.selectedPalette
             , material = tileDetail.materialFilter.selectedMaterials
             , category = tileDetail.productFilter.selectedCategories
+            , style = tileDetail.styleFilter.selectedStyles
           }
         showTileDetail = tileDetail.filteringComplete /= True
       in

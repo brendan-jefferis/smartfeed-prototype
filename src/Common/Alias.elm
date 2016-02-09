@@ -4,6 +4,7 @@ type alias Filter =
   { colour : Palette
   , material : List Material
   , category : List String
+  , style : List String
   }
 
 emptyFilter : Filter
@@ -11,6 +12,7 @@ emptyFilter =
   { colour = emptyPalette
   , material = emptyMaterials
   , category = []
+  , style = []
   }
 
 type alias PaletteColour =
