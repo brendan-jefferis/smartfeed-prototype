@@ -12670,14 +12670,7 @@ Elm.Component.SmartFeed.make = function (_elm) {
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("smart-feed")]),
-      _U.list([A2($Html.div,
-              _U.list([$Html$Attributes.id("debug")]),
-              _U.list([A2($Html.p,
-              _U.list([]),
-              _U.list([$Html.text(A2($Basics._op["++"],
-              "Filter: ",
-              $Basics.toString(model.filter)))]))]))
-              ,A2($Component$ActiveFilterPanel.view,
+      _U.list([A2($Component$ActiveFilterPanel.view,
               A2($Signal.forwardTo,address,ActiveFilterPanelActions),
               model.activeFilterPanel)
               ,A2($Html.div,

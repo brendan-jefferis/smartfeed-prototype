@@ -20,5 +20,12 @@
 	<script>
 		Elm.fullscreen(Elm.Main, { isDeviceMobile : window.mobilecheck() });
 	</script>
+	<script>
+		window.onload = function() {
+			if (window.mobilecheck()) {
+				document.getElementsByTagName("body")[0].className += "mobile";
+			}
+		};
+	</script>
 </body>
 </html>

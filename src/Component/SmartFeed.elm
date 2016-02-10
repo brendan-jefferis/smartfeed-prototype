@@ -215,13 +215,7 @@ view : Signal.Address Action -> Model -> Html
 view address model =
   div
     [ class "smart-feed" ] 
-    [ div
-        [ id "debug" ]
-        [ p
-            [ ]
-            [ text ("Filter: " ++ (toString model.filter)) ]
-        ]
-    , ActiveFilterPanel.view (Signal.forwardTo address ActiveFilterPanelActions) model.activeFilterPanel
+    [ ActiveFilterPanel.view (Signal.forwardTo address ActiveFilterPanelActions) model.activeFilterPanel
     , div
         [ class "scrollable-list" ]
         [ ul
