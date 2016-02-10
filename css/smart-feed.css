@@ -40,7 +40,7 @@
     background: #f3f3f3;
     border-radius: 2px;
     display: inline-block;
-    margin: 0 6px 6px 0;
+    margin: 0 8px 8px 0;
     position: relative; }
     .smart-feed .tag.with-swatch {
       padding-left: 14px; }
@@ -76,17 +76,17 @@
       font-size: 18px;
       color: #444; }
   .smart-feed .active-filter {
-    position: absolute;
+    position: fixed;
     width: 100%; }
     .smart-feed .active-filter .active-filter-bar {
       background: #222;
       padding: 6px;
-      min-height: 36px; }
+      min-height: 38px; }
       .smart-feed .active-filter .active-filter-bar .status-indicator {
         font-style: italic;
-        font-weight: bold;
         color: #f3f3f3;
-        line-height: 26px; }
+        font-size: 14px;
+        line-height: 38px; }
       .smart-feed .active-filter .active-filter-bar button {
         position: absolute;
         right: 6px; }

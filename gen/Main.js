@@ -11657,10 +11657,10 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
               _U.list([$Html$Attributes.$class("status-indicator")]),
               _U.list([$Html.text(statusIndicatorText(model.filter))]))
               ,model.isFilterPanelVisible ? A2($Html.button,
-              _U.list([$Html$Attributes.$class("btn-small secondary")
+              _U.list([$Html$Attributes.$class("secondary")
                       ,A2($Html$Events.onClick,address,HideFilterPanel)]),
               _U.list([$Html.text(isFiltered(model.filter) ? "Hide" : "Cancel")])) : A2($Html.button,
-              _U.list([$Html$Attributes.$class("btn-small secondary")
+              _U.list([$Html$Attributes.$class("secondary")
                       ,A2($Html$Events.onClick,address,ShowFilterPanel)]),
               _U.list([$Html.text(isFiltered(model.filter) ? "Show" : "Search")]))
               ,model.isFilterPanelVisible ? A2($Html.div,
@@ -12762,6 +12762,47 @@ Elm.Component.SmartFeed.make = function (_elm) {
                                    ,url: "/products/4"
                                    ,category: "Ceiling lights"}]);
    var dummyTiles = _U.list([{tileId: 1
+                             ,brand: "Freedom Furniture"
+                             ,logoUrl: "/images/logo/freedom-logo.png"
+                             ,title: "Nordic inspired"
+                             ,photoUrl: "/images/tile/nordic-room.png"
+                             ,isFavourite: false
+                             ,url: "/tile/1"
+                             ,products: dummyProductsOne
+                             ,palette: {name: $Maybe.Nothing
+                                       ,colours: _U.list([{name: "Black",hex: "#1A1611"}
+                                                         ,{name: "Grey",hex: "#D3D0CB"}
+                                                         ,{name: "",hex: "#ABA49A"}
+                                                         ,{name: "White",hex: "#FFFFFF"}
+                                                         ,{name: "Brown",hex: "#543822"}
+                                                         ,{name: "Fawn",hex: "#AC9C82"}])}
+                             ,materials: _U.list([{name: "Fabric"
+                                                  ,modifier: $Maybe.Just("Cotton")}
+                                                 ,{name: "Metal",modifier: $Maybe.Just("Brass")}
+                                                 ,{name: "Wood",modifier: $Maybe.Just("Light")}])
+                             ,styles: _U.list(["Scandinavian","Bohemian"])}
+                            ,{tileId: 2
+                             ,brand: "Freedom Furniture"
+                             ,logoUrl: "/images/logo/freedom-logo.png"
+                             ,title: "Signature Collection"
+                             ,photoUrl: "/images/tile/signature-collection.png"
+                             ,isFavourite: false
+                             ,url: "/tile/2"
+                             ,products: dummyProductsTwo
+                             ,palette: {name: $Maybe.Nothing
+                                       ,colours: _U.list([{name: "Midnight",hex: "#211F20"}
+                                                         ,{name: "Slate",hex: "#47464B"}
+                                                         ,{name: "Light Cyan",hex: "#7ED3D0"}
+                                                         ,{name: "Brick",hex: "#CA3727"}
+                                                         ,{name: "Lemon tree",hex: "#E3CD2A"}])}
+                             ,materials: _U.list([{name: "Leather",modifier: $Maybe.Nothing}
+                                                 ,{name: "Metal",modifier: $Maybe.Just("Brushed")}
+                                                 ,{name: "Fabric",modifier: $Maybe.Just("Linen")}
+                                                 ,{name: "Wood",modifier: $Maybe.Nothing}])
+                             ,styles: _U.list(["Contemporary"
+                                              ,"Industrial modern"
+                                              ,"Vintage"])}
+                            ,{tileId: 1
                              ,brand: "Freedom Furniture"
                              ,logoUrl: "/images/logo/freedom-logo.png"
                              ,title: "Nordic inspired"

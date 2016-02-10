@@ -133,13 +133,13 @@ view address model =
               [ text (statusIndicatorText model.filter) ]
           , if model.isFilterPanelVisible then
               button
-                [ class "btn-small secondary"
+                [ class "secondary"
                 , onClick address HideFilterPanel
                 ]
                 [ text (if isFiltered model.filter then "Hide" else "Cancel") ]
             else
               button
-                [ class "btn-small secondary"
+                [ class "secondary"
                 , onClick address ShowFilterPanel
                 ]
                 [ text (if isFiltered model.filter then "Show" else "Search") ]

@@ -70,7 +70,7 @@ $icon-size: 18px;
 		background: $light-grey;
 		border-radius: 2px;
 		display: inline-block;
-		margin: 0 6px 6px 0;
+		margin: 0 8px 8px 0;
 		position: relative;
 		
 		&.with-swatch {
@@ -124,19 +124,19 @@ $icon-size: 18px;
 	}
 
 	.active-filter {
-		position: absolute;
+		position: fixed;
 		width: 100%;
 
 		.active-filter-bar {
 			background: #222;
 			padding: 6px;
-			min-height: 36px;
+			min-height: 38px;
 
 			.status-indicator {
 				font-style: italic;
-				font-weight: bold;
 				color: $light-grey;
-				line-height: 26px;
+				font-size: 14px;
+				line-height: 38px;
 			}
 
 			button {
