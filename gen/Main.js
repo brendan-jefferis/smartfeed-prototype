@@ -11559,11 +11559,18 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
       return $Basics.not($List.isEmpty(filter.colour.colours)) || ($Basics.not($List.isEmpty(filter.material)) || ($Basics.not($List.isEmpty(filter.category)) || $Basics.not($List.isEmpty(filter.style))));
    };
    var activeFilterText = function (filter) {
-      var filters = _U.list(["colour"
-                            ,"material"
-                            ,"style"
-                            ,"keyword"
-                            ,"category"]);
+      var styleFilter = $Basics.not($List.isEmpty(filter.style)) ? "style" : "";
+      var categoryFilter = $Basics.not($List.isEmpty(filter.category)) ? "category" : "";
+      var materialFilter = $Basics.not($List.isEmpty(filter.material)) ? "material" : "";
+      var colourFilter = $Basics.not($List.isEmpty(filter.colour.colours)) ? "colour" : "";
+      var filters = A2($List.filter,
+      function (s) {
+         return !_U.eq(s,"");
+      },
+      _U.list([colourFilter
+              ,materialFilter
+              ,categoryFilter
+              ,styleFilter]));
       var filterTest = _U.cmp($List.length(filters),
       3) > 0 ? A2($Basics._op["++"],
       A2($String.join,", ",A2($List.take,3,filters)),

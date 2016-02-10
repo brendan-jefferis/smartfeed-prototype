@@ -185,7 +185,11 @@ statusIndicatorText filter =
 activeFilterText : Common.Alias.Filter -> String
 activeFilterText filter =
   let
-    filters = ["colour", "material", "style", "keyword", "category"]
+    colourFilter = if not (List.isEmpty filter.colour.colours) then "colour" else ""
+    materialFilter = if not (List.isEmpty filter.material) then "material" else ""
+    categoryFilter = if not (List.isEmpty filter.category) then "category" else ""
+    styleFilter = if not (List.isEmpty filter.style) then "style" else ""
+    filters = List.filter (\s -> s /= "") [colourFilter, materialFilter, categoryFilter, styleFilter]
     filterTest =
       if List.length filters > 3 then
         (String.join ", " (List.take 3 filters)) ++ " & more"
