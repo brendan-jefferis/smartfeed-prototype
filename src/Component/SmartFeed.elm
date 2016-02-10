@@ -240,12 +240,6 @@ view address model =
   div
     [ class "smart-feed" ] 
     [ ActiveFilterPanel.view (Signal.forwardTo address ActiveFilterPanelActions) model.activeFilterPanel
-    , div
-        [ class "scrollable-list" ]
-        [ ul
-            [ class "tile-list" ]
-            (List.map (tileList address) model.tiles)
-        ]
     , if model.isTileDetailView then
         div
           [ class "tile-detail" ]
@@ -259,5 +253,10 @@ view address model =
           , TileDetail.view (Signal.forwardTo address TileDetail) model.tileDetail
           ]
       else
-        div [] []
+        div
+        [ class "scrollable-list" ]
+        [ ul
+            [ class "tile-list" ]
+            (List.map (tileList address) model.tiles)
+        ]
     ]

@@ -12680,11 +12680,6 @@ Elm.Component.SmartFeed.make = function (_elm) {
       _U.list([A2($Component$ActiveFilterPanel.view,
               A2($Signal.forwardTo,address,ActiveFilterPanelActions),
               model.activeFilterPanel)
-              ,A2($Html.div,
-              _U.list([$Html$Attributes.$class("scrollable-list")]),
-              _U.list([A2($Html.ul,
-              _U.list([$Html$Attributes.$class("tile-list")]),
-              A2($List.map,tileList(address),model.tiles))]))
               ,model.isTileDetailView ? A2($Html.div,
               _U.list([$Html$Attributes.$class("tile-detail")]),
               _U.list([A2($Html.div,
@@ -12695,7 +12690,11 @@ Elm.Component.SmartFeed.make = function (_elm) {
                       _U.list([$Html.text("Back")]))]))
                       ,A2($Component$SmartFeedTileDetail.view,
                       A2($Signal.forwardTo,address,TileDetail),
-                      model.tileDetail)])) : A2($Html.div,_U.list([]),_U.list([]))]));
+                      model.tileDetail)])) : A2($Html.div,
+              _U.list([$Html$Attributes.$class("scrollable-list")]),
+              _U.list([A2($Html.ul,
+              _U.list([$Html$Attributes.$class("tile-list")]),
+              A2($List.map,tileList(address),model.tiles))]))]));
    });
    var NoOp = {ctor: "NoOp"};
    var Model = F5(function (a,b,c,d,e) {

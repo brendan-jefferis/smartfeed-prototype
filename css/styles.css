@@ -1,12 +1,15 @@
-body.mobile {
-  margin: 0; }
+body:not(.mobile) {
+  margin: initial; }
 
 body {
+  margin: 0;
   padding: 0;
   height: 100%;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background: #f0f0f0;
   font-size: 12px; }
+  body::-webkit-scrollbar {
+    width: 0; }
 
 h4 {
   margin-bottom: 3px; }
