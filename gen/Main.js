@@ -11593,20 +11593,20 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
               _U.list([$Html$Attributes.$class("fa fa-search search-icon")]),
               _U.list([]))]));
    });
-   var filterListItem = F2(function (address,label) {
+   var materialFilterListItem = F2(function (address,material) {
       return A2($Html.li,
       _U.list([]),
-      _U.list([$Common$Tag.view(label)]));
+      _U.list([$Common$Tag.view(material)]));
    });
-   var filterGroup = F3(function (address,label,filter) {
+   var materialFilterGroup = F2(function (address,filter) {
       return A2($Html.div,
       _U.list([]),
       _U.list([A2($Html.h4,
               _U.list([$Html$Attributes.$class("subheader")]),
-              _U.list([$Html.text(label)]))
+              _U.list([$Html.text("Material")]))
               ,A2($Html.ul,
               _U.list([$Html$Attributes.$class("blank")]),
-              A2($List.map,filterListItem(address),filter))]));
+              A2($List.map,materialFilterListItem(address),filter))]));
    });
    var update = F2(function (action,model) {
       var _p0 = action;
@@ -11616,7 +11616,8 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
            {isFilterPanelVisible: true});
          case "HideFilterPanel": return _U.update(model,
            {isFilterPanelVisible: false});
-         default: var selectedPalette = model.filter.colour;
+         case "RemoveColourFilter":
+         var selectedPalette = model.filter.colour;
            var updatedPalette = _U.update(selectedPalette,
            {colours: A2($List.filter,
            function (c) {
@@ -11625,7 +11626,66 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
            selectedPalette.colours)});
            var filter = model.filter;
            var updatedFilter = _U.update(filter,{colour: updatedPalette});
-           return _U.update(model,{filter: updatedFilter});}
+           return _U.update(model,{filter: updatedFilter});
+         case "RemoveCategoryFilter": var filter = model.filter;
+           var updatedFilter = _U.update(filter,
+           {category: A2($List.filter,
+           function (c) {
+              return !_U.eq(c,_p0._0);
+           },
+           model.filter.category)});
+           return _U.update(model,{filter: updatedFilter});
+         case "RemoveStyleFilter": var filter = model.filter;
+           var updatedFilter = _U.update(filter,
+           {style: A2($List.filter,
+           function (c) {
+              return !_U.eq(c,_p0._0);
+           },
+           model.filter.style)});
+           return _U.update(model,{filter: updatedFilter});
+         default: return _U.update(model,
+           {isFilteringComplete: true,isFilterPanelVisible: false});}
+   });
+   var Done = {ctor: "Done"};
+   var RemoveStyleFilter = function (a) {
+      return {ctor: "RemoveStyleFilter",_0: a};
+   };
+   var styleFilterListItem = F2(function (address,style) {
+      return A2($Html.li,
+      _U.list([A2($Html$Events.onClick,
+      address,
+      RemoveStyleFilter(style))]),
+      _U.list([$Common$Tag.view(style)]));
+   });
+   var styleFilterGroup = F2(function (address,filter) {
+      return A2($Html.div,
+      _U.list([]),
+      _U.list([A2($Html.h4,
+              _U.list([$Html$Attributes.$class("subheader")]),
+              _U.list([$Html.text("Style")]))
+              ,A2($Html.ul,
+              _U.list([$Html$Attributes.$class("blank")]),
+              A2($List.map,styleFilterListItem(address),filter))]));
+   });
+   var RemoveCategoryFilter = function (a) {
+      return {ctor: "RemoveCategoryFilter",_0: a};
+   };
+   var categoryFilterListItem = F2(function (address,category) {
+      return A2($Html.li,
+      _U.list([A2($Html$Events.onClick,
+      address,
+      RemoveCategoryFilter(category))]),
+      _U.list([$Common$Tag.view(category)]));
+   });
+   var categoryFilterGroup = F2(function (address,filter) {
+      return A2($Html.div,
+      _U.list([]),
+      _U.list([A2($Html.h4,
+              _U.list([$Html$Attributes.$class("subheader")]),
+              _U.list([$Html.text("Category")]))
+              ,A2($Html.ul,
+              _U.list([$Html$Attributes.$class("blank")]),
+              A2($List.map,categoryFilterListItem(address),filter))]));
    });
    var RemoveColourFilter = function (a) {
       return {ctor: "RemoveColourFilter",_0: a};
@@ -11664,10 +11724,10 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
               _U.list([$Html$Attributes.$class("status-indicator")]),
               _U.list([$Html.text(statusIndicatorText(model.filter))]))
               ,model.isFilterPanelVisible ? A2($Html.button,
-              _U.list([$Html$Attributes.$class("secondary")
+              _U.list([$Html$Attributes.$class("toggle-panel secondary")
                       ,A2($Html$Events.onClick,address,HideFilterPanel)]),
               _U.list([$Html.text(isFiltered(model.filter) ? "Hide" : "Cancel")])) : A2($Html.button,
-              _U.list([$Html$Attributes.$class("secondary")
+              _U.list([$Html$Attributes.$class("toggle-panel secondary")
                       ,A2($Html$Events.onClick,address,ShowFilterPanel)]),
               _U.list([$Html.text(isFiltered(model.filter) ? "Show" : "Search")]))
               ,model.isFilterPanelVisible ? A2($Html.div,
@@ -11681,24 +11741,27 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
                       model.filter.colour.colours) : A2($Html.div,
                       _U.list([]),
                       _U.list([]))
-                      ,_U.cmp(materialCount,0) > 0 ? A3(filterGroup,
+                      ,_U.cmp(materialCount,0) > 0 ? A2(materialFilterGroup,
                       address,
-                      "Material",
                       A2($List.map,
                       function (_) {
                          return _.name;
                       },
                       model.filter.material)) : A2($Html.div,_U.list([]),_U.list([]))
-                      ,_U.cmp(productCount,0) > 0 ? A3(filterGroup,
+                      ,_U.cmp(productCount,0) > 0 ? A2(categoryFilterGroup,
                       address,
-                      "Product",
                       model.filter.category) : A2($Html.div,_U.list([]),_U.list([]))
-                      ,_U.cmp(styleCount,0) > 0 ? A3(filterGroup,
+                      ,_U.cmp(styleCount,0) > 0 ? A2(styleFilterGroup,
                       address,
-                      "Style",
-                      model.filter.style) : A2($Html.div,
-                      _U.list([]),
-                      _U.list([]))])) : A2($Html.div,_U.list([]),_U.list([]))]))]));
+                      model.filter.style) : A2($Html.div,_U.list([]),_U.list([]))
+                      ,A2($Html.div,
+                      _U.list([$Html$Attributes.$class("content-right")]),
+                      _U.list([A2($Html.button,
+                      _U.list([$Html$Attributes.$class("secondary")
+                              ,A2($Html$Events.onClick,address,Done)]),
+                      _U.list([$Html.text("Done")]))]))])) : A2($Html.div,
+              _U.list([]),
+              _U.list([]))]))]));
    });
    var NoOp = {ctor: "NoOp"};
    var init = function (filter) {
@@ -12653,10 +12716,13 @@ Elm.Component.SmartFeed.make = function (_elm) {
            ,tileDetail: A2($Component$SmartFeedTileDetail.init,
            $Component$SmartFeedTile.init,
            $Common$Alias.emptyFilter)});
-         default: return _U.update(model,
-           {activeFilterPanel: A2($Component$ActiveFilterPanel.update,
+         default:
+         var activeFilterPanel = A2($Component$ActiveFilterPanel.update,
            _p0._0,
-           model.activeFilterPanel)});}
+           model.activeFilterPanel);
+           return _U.update(model,
+           {activeFilterPanel: activeFilterPanel
+           ,filter: activeFilterPanel.isFilteringComplete ? activeFilterPanel.filter : model.filter});}
    });
    var ActiveFilterPanelActions = function (a) {
       return {ctor: "ActiveFilterPanelActions",_0: a};
@@ -12778,7 +12844,7 @@ Elm.Component.SmartFeed.make = function (_elm) {
                              ,palette: {name: $Maybe.Nothing
                                        ,colours: _U.list([{name: "Black",hex: "#1A1611"}
                                                          ,{name: "Grey",hex: "#D3D0CB"}
-                                                         ,{name: "",hex: "#ABA49A"}
+                                                         ,{name: "Burlap",hex: "#ABA49A"}
                                                          ,{name: "White",hex: "#FFFFFF"}
                                                          ,{name: "Brown",hex: "#543822"}
                                                          ,{name: "Fawn",hex: "#AC9C82"}])}
@@ -12808,47 +12874,30 @@ Elm.Component.SmartFeed.make = function (_elm) {
                              ,styles: _U.list(["Contemporary"
                                               ,"Industrial modern"
                                               ,"Vintage"])}
-                            ,{tileId: 1
+                            ,{tileId: 3
                              ,brand: "Freedom Furniture"
                              ,logoUrl: "/images/logo/freedom-logo.png"
-                             ,title: "Nordic inspired"
-                             ,photoUrl: "/images/tile/nordic-room.png"
+                             ,title: "Dahlia sofa"
+                             ,photoUrl: "/images/product/dahlia-sofa.png"
                              ,isFavourite: false
-                             ,url: "/tile/1"
-                             ,products: dummyProductsOne
+                             ,url: "/tile/3"
+                             ,products: _U.list([{title: "Dahlia sofa"
+                                                 ,description: "This is the first product"
+                                                 ,price: 12.99
+                                                 ,isFavourite: false
+                                                 ,isInCart: false
+                                                 ,photoUrl: "/images/product/dahlia-sofa.png"
+                                                 ,thumbnailUrl: "/images/thumbnail/dahlia-sofa.png"
+                                                 ,url: "/products/1"
+                                                 ,category: "Sofas"}])
                              ,palette: {name: $Maybe.Nothing
-                                       ,colours: _U.list([{name: "Black",hex: "#1A1611"}
-                                                         ,{name: "Grey",hex: "#D3D0CB"}
-                                                         ,{name: "",hex: "#ABA49A"}
-                                                         ,{name: "White",hex: "#FFFFFF"}
-                                                         ,{name: "Brown",hex: "#543822"}
+                                       ,colours: _U.list([{name: "Grey",hex: "#D3D0CB"}
                                                          ,{name: "Fawn",hex: "#AC9C82"}])}
                              ,materials: _U.list([{name: "Fabric"
                                                   ,modifier: $Maybe.Just("Cotton")}
                                                  ,{name: "Metal",modifier: $Maybe.Just("Brass")}
                                                  ,{name: "Wood",modifier: $Maybe.Just("Light")}])
-                             ,styles: _U.list(["Scandinavian","Bohemian"])}
-                            ,{tileId: 2
-                             ,brand: "Freedom Furniture"
-                             ,logoUrl: "/images/logo/freedom-logo.png"
-                             ,title: "Signature Collection"
-                             ,photoUrl: "/images/tile/signature-collection.png"
-                             ,isFavourite: false
-                             ,url: "/tile/2"
-                             ,products: dummyProductsTwo
-                             ,palette: {name: $Maybe.Nothing
-                                       ,colours: _U.list([{name: "Midnight",hex: "#211F20"}
-                                                         ,{name: "Slate",hex: "#47464B"}
-                                                         ,{name: "Light Cyan",hex: "#7ED3D0"}
-                                                         ,{name: "Brick",hex: "#CA3727"}
-                                                         ,{name: "Lemon tree",hex: "#E3CD2A"}])}
-                             ,materials: _U.list([{name: "Leather",modifier: $Maybe.Nothing}
-                                                 ,{name: "Metal",modifier: $Maybe.Just("Brushed")}
-                                                 ,{name: "Fabric",modifier: $Maybe.Just("Linen")}
-                                                 ,{name: "Wood",modifier: $Maybe.Nothing}])
-                             ,styles: _U.list(["Contemporary"
-                                              ,"Industrial modern"
-                                              ,"Vintage"])}]);
+                             ,styles: _U.list(["Scandinavian"])}]);
    var init = {tiles: dummyTiles
               ,isTileDetailView: false
               ,tileDetail: A2($Component$SmartFeedTileDetail.init,

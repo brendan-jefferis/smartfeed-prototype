@@ -91,7 +91,7 @@ body.mobile .smart-feed .tile-detail {
         color: #f3f3f3;
         font-size: 14px;
         line-height: 38px; }
-      .smart-feed .active-filter .active-filter-bar button {
+      .smart-feed .active-filter .active-filter-bar .toggle-panel {
         position: absolute;
         right: 12px; }
       .smart-feed .active-filter .active-filter-bar .filter-panel {

@@ -142,7 +142,7 @@ body.mobile .smart-feed .tile-detail { position: fixed; }
 				line-height: 38px;
 			}
 
-			button {
+			.toggle-panel {
 				position: absolute;
 				right: 12px;
 			}
@@ -384,7 +384,7 @@ body.mobile .smart-feed .tile-detail { position: fixed; }
 					}
 
 				}
-				
+
 				.action {
 					margin-top: 20px;
 				}

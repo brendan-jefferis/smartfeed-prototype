@@ -27,6 +27,9 @@ type Action
   | ShowFilterPanel
   | HideFilterPanel
   | RemoveColourFilter Common.Alias.PaletteColour
+  | RemoveCategoryFilter String
+  | RemoveStyleFilter String
+  | Done
 
 update : Action -> Model -> Model
 update action model =
@@ -61,6 +64,36 @@ update action model =
             filter = updatedFilter
         }
 
+    RemoveCategoryFilter category ->
+      let
+        filter = model.filter
+        updatedFilter =
+          { filter |
+              category = List.filter (\c -> c /= category) model.filter.category
+          }
+      in
+        { model |
+            filter = updatedFilter
+        }
+
+    RemoveStyleFilter style ->
+      let
+        filter = model.filter
+        updatedFilter =
+          { filter |
+              style = List.filter (\c -> c /= style) model.filter.style
+          }
+      in
+        { model |
+            filter = updatedFilter
+        }
+
+    Done ->
+      { model |
+          isFilteringComplete = True
+        , isFilterPanelVisible = False
+      }
+
 
 
 
@@ -69,13 +102,6 @@ colourFilterListItem address colour =
   li
     [ onClick address (RemoveColourFilter colour) ]
     [ Tag.viewWithSwatch colour.hex colour.name
-    ]
-
-filterListItem : Signal.Address Action -> String -> Html
-filterListItem address label =
-  li
-    [ ]
-    [ Tag.view label
     ]
 
 colourFilterGroup : Signal.Address Action -> List PaletteColour -> Html
@@ -90,16 +116,61 @@ colourFilterGroup address filter =
         (List.map (colourFilterListItem address) filter)
     ]
 
-filterGroup : Signal.Address Action -> String -> List String -> Html
-filterGroup address label filter =
+categoryFilterListItem : Signal.Address Action -> String -> Html
+categoryFilterListItem address category =
+  li
+    [ onClick address (RemoveCategoryFilter category)]
+    [ Tag.view category
+    ]
+
+categoryFilterGroup : Signal.Address Action -> List String -> Html
+categoryFilterGroup address filter =
   div
     [ ]
     [ h4
         [ class "subheader" ]
-        [ text label ]
+        [ text "Category" ]
     , ul
         [ class "blank" ]
-        (List.map (filterListItem address) filter)
+        (List.map (categoryFilterListItem address) filter)
+    ]
+
+styleFilterListItem : Signal.Address Action -> String -> Html
+styleFilterListItem address style =
+  li
+    [ onClick address (RemoveStyleFilter style)]
+    [ Tag.view style
+    ]
+
+styleFilterGroup : Signal.Address Action -> List String -> Html
+styleFilterGroup address filter =
+  div
+    [ ]
+    [ h4
+        [ class "subheader" ]
+        [ text "Style" ]
+    , ul
+        [ class "blank" ]
+        (List.map (styleFilterListItem address) filter)
+    ]
+
+materialFilterListItem : Signal.Address Action -> String -> Html
+materialFilterListItem address material =
+  li
+    [ ]
+    [ Tag.view material
+    ]
+
+materialFilterGroup : Signal.Address Action -> List String -> Html
+materialFilterGroup address filter =
+  div
+    [ ]
+    [ h4
+        [ class "subheader" ]
+        [ text "Material" ]
+    , ul
+        [ class "blank" ]
+        (List.map (materialFilterListItem address) filter)
     ]
 
 searchBar : Signal.Address Action -> Model -> Html
@@ -133,13 +204,13 @@ view address model =
               [ text (statusIndicatorText model.filter) ]
           , if model.isFilterPanelVisible then
               button
-                [ class "secondary"
+                [ class "toggle-panel secondary"
                 , onClick address HideFilterPanel
                 ]
                 [ text (if isFiltered model.filter then "Hide" else "Cancel") ]
             else
               button
-                [ class "secondary"
+                [ class "toggle-panel secondary"
                 , onClick address ShowFilterPanel
                 ]
                 [ text (if isFiltered model.filter then "Show" else "Search") ]
@@ -155,17 +226,25 @@ view address model =
                   else
                     div [] []
                 , if materialCount > 0 then
-                    (filterGroup address "Material" (List.map .name model.filter.material))
+                    (materialFilterGroup address (List.map .name model.filter.material))
                   else
                     div [] []
                 , if productCount > 0 then
-                    (filterGroup address "Product" model.filter.category)
+                    (categoryFilterGroup address model.filter.category)
                   else
                     div [] []
                 , if styleCount > 0 then
-                    (filterGroup address "Style" model.filter.style)
+                    (styleFilterGroup address model.filter.style)
                   else
                     div [] []
+                , div
+                    [ class "content-right" ]
+                    [ button
+                        [ class "secondary"
+                        , onClick address Done
+                        ]
+                        [ text "Done" ]
+                    ]
                 ]
             else
               div [] []

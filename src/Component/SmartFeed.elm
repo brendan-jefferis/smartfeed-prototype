@@ -102,7 +102,7 @@ dummyTiles =
     , isFavourite = False
     , url = "/tile/1"
     , products = dummyProductsOne
-    , palette = { name = Nothing, colours = [ { name = "Black", hex = "#1A1611" }, { name = "Grey", hex = "#D3D0CB" }, { name = "", hex = "#ABA49A" }, { name = "White", hex = "#FFFFFF" }, { name = "Brown", hex = "#543822" }, { name = "Fawn", hex = "#AC9C82" }] }
+    , palette = { name = Nothing, colours = [ { name = "Black", hex = "#1A1611" }, { name = "Grey", hex = "#D3D0CB" }, { name = "Burlap", hex = "#ABA49A" }, { name = "White", hex = "#FFFFFF" }, { name = "Brown", hex = "#543822" }, { name = "Fawn", hex = "#AC9C82" }] }
     , materials = [{name = "Fabric", modifier = Just "Cotton" }, {name = "Metal", modifier = Just "Brass"}, {name = "Wood", modifier = Just "Light"}]
     , styles = ["Scandinavian", "Bohemian"]
     }
@@ -118,29 +118,27 @@ dummyTiles =
     , materials = [{name = "Leather", modifier = Nothing}, {name = "Metal", modifier = Just "Brushed"}, {name = "Fabric", modifier = Just "Linen"}, {name = "Wood", modifier = Nothing}]
     , styles = ["Contemporary", "Industrial modern", "Vintage"]
     }
-  , { tileId = 1
+  , { tileId = 3
     , brand = "Freedom Furniture"
     , logoUrl = "/images/logo/freedom-logo.png"
-    , title = "Nordic inspired"
-    , photoUrl = "/images/tile/nordic-room.png"
+    , title = "Dahlia sofa"
+    , photoUrl = "/images/product/dahlia-sofa.png"
     , isFavourite = False
-    , url = "/tile/1"
-    , products = dummyProductsOne
-    , palette = { name = Nothing, colours = [ { name = "Black", hex = "#1A1611" }, { name = "Grey", hex = "#D3D0CB" }, { name = "", hex = "#ABA49A" }, { name = "White", hex = "#FFFFFF" }, { name = "Brown", hex = "#543822" }, { name = "Fawn", hex = "#AC9C82" }] }
+    , url = "/tile/3"
+    , products =
+      [{ title = "Dahlia sofa"
+      , description = "This is the first product"
+      , price = 12.99
+      , isFavourite = False
+      , isInCart = False
+      , photoUrl = "/images/product/dahlia-sofa.png"
+      , thumbnailUrl = "/images/thumbnail/dahlia-sofa.png"
+      , url = "/products/1"
+      , category = "Sofas"
+      }]
+    , palette = { name = Nothing, colours = [{ name = "Grey", hex = "#D3D0CB" }, { name = "Fawn", hex = "#AC9C82" }] }
     , materials = [{name = "Fabric", modifier = Just "Cotton" }, {name = "Metal", modifier = Just "Brass"}, {name = "Wood", modifier = Just "Light"}]
-    , styles = ["Scandinavian", "Bohemian"]
-    }
-  , { tileId = 2
-    , brand = "Freedom Furniture"
-    , logoUrl = "/images/logo/freedom-logo.png"
-    , title = "Signature Collection"
-    , photoUrl = "/images/tile/signature-collection.png"
-    , isFavourite = False
-    , url = "/tile/2"
-    , products = dummyProductsTwo
-    , palette = { name = Nothing, colours = [{ name = "Midnight", hex = "#211F20"}, {name = "Slate", hex = "#47464B"}, {name = "Light Cyan", hex = "#7ED3D0"}, {name = "Brick", hex = "#CA3727"}, {name = "Lemon tree", hex = "#E3CD2A"}] }
-    , materials = [{name = "Leather", modifier = Nothing}, {name = "Metal", modifier = Just "Brushed"}, {name = "Fabric", modifier = Just "Linen"}, {name = "Wood", modifier = Nothing}]
-    , styles = ["Contemporary", "Industrial modern", "Vintage"]
+    , styles = ["Scandinavian"]
     }
   ]
 
@@ -217,12 +215,13 @@ update action model =
       }
 
     ActiveFilterPanelActions act ->
-      { model |
-          activeFilterPanel = ActiveFilterPanel.update act model.activeFilterPanel
-      }
-
-
-
+      let
+        activeFilterPanel = ActiveFilterPanel.update act model.activeFilterPanel
+      in
+        { model |
+            activeFilterPanel = activeFilterPanel
+          , filter = if activeFilterPanel.isFilteringComplete then activeFilterPanel.filter else model.filter
+        }
 
 
 --======================================| VIEW |
