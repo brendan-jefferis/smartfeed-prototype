@@ -34,3 +34,5 @@ gen/*.js
 *.scssc
 *.elmi
 *.elmo
+*.publishproj
+*.pubxml

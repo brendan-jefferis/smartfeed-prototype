@@ -1,4 +1,4 @@
-module Component.ProductFilter (Model, init, Action, update, view) where
+module Component.CategoryFilter (Model, init, Action, update, view) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -117,13 +117,13 @@ view address model =
           [ ]
           [ h6
               [ class "subheader" ]
-              [ text "Product types" ]
+              [ text "Categories of these products" ]
           , ul
               [ class "blank" ]
               (List.map (listItem address model.selectedCategories) model.featuredCategories)
           , h6
             [ class "subheader with-divider" ]
-            [ text "Other product types" ]
+            [ text "Other categories" ]
           ]
         else
           div [] []

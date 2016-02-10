@@ -30,6 +30,13 @@ button {
     background: #ccc;
     color: #333; }
 
+input[type=text] {
+  height: 32px;
+  border-radius: 2px;
+  border: none;
+  padding: 0 5px;
+  box-sizing: border-box; }
+
 ul.blank {
   margin: 0;
   padding: 0;

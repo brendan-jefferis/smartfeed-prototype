@@ -125,7 +125,7 @@ view address model =
             [ ]
             [ h6
                 [ class "subheader" ]
-                [ text "Materials featured in these products" ]
+                [ text "Materials found in these products" ]
             , ul
                 [ class "blank materials" ]
                 (List.map (listItem address model.selectedMaterials) model.featuredMaterials)

@@ -40,15 +40,41 @@
     background: #f3f3f3;
     border-radius: 2px;
     display: inline-block;
-    margin-right: 6px; }
+    margin: 0 6px 6px 0;
+    position: relative; }
+    .smart-feed .tag.with-swatch {
+      padding-left: 14px; }
     .smart-feed .tag span,
     .smart-feed .tag i {
       color: #444; }
+    .smart-feed .tag span {
+      vertical-align: middle; }
     .smart-feed .tag i {
       font-size: 18px;
       vertical-align: middle;
       cursor: pointer;
       margin-left: 6px; }
+    .smart-feed .tag .tag-swatch {
+      height: 24px;
+      width: 10px;
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      top: 3px;
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px; }
+  .smart-feed .search-bar {
+    position: relative;
+    margin-bottom: 10px; }
+    .smart-feed .search-bar input {
+      width: 100%;
+      padding-left: 32px; }
+    .smart-feed .search-bar .search-icon {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-size: 18px;
+      color: #444; }
   .smart-feed .active-filter {
     position: absolute;
     width: 100%; }
@@ -66,8 +92,7 @@
         right: 6px; }
       .smart-feed .active-filter .active-filter-bar .filter-panel {
         color: #f3f3f3;
-        padding: 10px 8px;
-        margin-top: 6px; }
+        padding: 10px 8px; }
         .smart-feed .active-filter .active-filter-bar .filter-panel li {
           display: inline-block; }
         .smart-feed .active-filter .active-filter-bar .filter-panel .subheader {

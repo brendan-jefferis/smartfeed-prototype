@@ -40,6 +40,14 @@ button {
 	}
 }
 
+input[type=text] {
+	height: 32px;
+	border-radius: 2px;
+	border: none;
+	padding: 0 5px;
+	box-sizing: border-box;
+}
+
 ul.blank {
 	@include blank-list();
 }

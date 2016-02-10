@@ -6,7 +6,7 @@ import Html.Events exposing (onClick)
 
 import Component.ColourFilter as ColourFilter
 import Component.MaterialFilter as MaterialFilter
-import Component.ProductFilter as ProductFilter
+import Component.CategoryFilter as CategoryFilter
 import Component.StyleFilter as StyleFilter
 import Component.SmartFeedTile as Tile
 import Common.Alias exposing (Product, Palette)
@@ -19,7 +19,7 @@ type FilterType
   = None
   | Colour
   | Material
-  | Product
+  | Category
   | Style
 
 type alias Model =
@@ -29,7 +29,7 @@ type alias Model =
   , filter : Common.Alias.Filter
   , colourFilter : ColourFilter.Model
   , materialFilter : MaterialFilter.Model
-  , productFilter : ProductFilter.Model
+  , productFilter : CategoryFilter.Model
   , styleFilter : StyleFilter.Model
   , filteringComplete : Bool
   }
@@ -42,7 +42,7 @@ init tile filter =
   , filter = filter
   , colourFilter = ColourFilter.init filter.colour tile.palette
   , materialFilter = MaterialFilter.init filter.material tile.materials
-  , productFilter = ProductFilter.init filter.category (List.map .category tile.products)
+  , productFilter = CategoryFilter.init filter.category (List.map .category tile.products)
   , styleFilter = StyleFilter.init filter.style tile.styles
   , filteringComplete = False
   }
@@ -56,11 +56,11 @@ type Action
   = NoOp
   | ColourFilterActions ColourFilter.Action
   | MaterialFilterActions MaterialFilter.Action
-  | ProductFilterActions ProductFilter.Action
+  | CategoryFilterActions CategoryFilter.Action
   | StyleFilterActions StyleFilter.Action
   | ShowColourFilter
   | ShowMaterialFilter
-  | ShowProductFilter
+  | ShowCategoryFilter
   | ShowStyleFilter
   | SaveAndContinue
 
@@ -80,9 +80,9 @@ update action model =
           materialFilter = MaterialFilter.update act model.materialFilter
       }
 
-    ProductFilterActions act ->
+    CategoryFilterActions act ->
       { model |
-          productFilter = ProductFilter.update act model.productFilter
+          productFilter = CategoryFilter.update act model.productFilter
       }
 
     StyleFilterActions act ->
@@ -100,9 +100,9 @@ update action model =
           visibleFilter = Material
         }
 
-    ShowProductFilter ->
+    ShowCategoryFilter ->
       { model |
-          visibleFilter = Product
+          visibleFilter = Category
       }
 
     ShowStyleFilter ->
@@ -180,8 +180,8 @@ filterView address model =
       Material ->
         MaterialFilter.view (Signal.forwardTo address MaterialFilterActions) model.materialFilter
 
-      Product ->
-        ProductFilter.view (Signal.forwardTo address ProductFilterActions) model.productFilter
+      Category ->
+        CategoryFilter.view (Signal.forwardTo address CategoryFilterActions) model.productFilter
 
       Style ->
         StyleFilter.view (Signal.forwardTo address StyleFilterActions) model.styleFilter
@@ -190,7 +190,7 @@ filterView address model =
       [ class "filter-container" ]
       [ span
           [ class "filter-title" ]
-          [ text "Show me more like this..."]
+          [ text "Show me more of this..."]
       , div
           [ class "action-row" ]
           [ button
@@ -200,8 +200,8 @@ filterView address model =
               [ onClick address ShowMaterialFilter ]
               [ text "Material" ]
           , button
-              [ onClick address ShowProductFilter]
-              [ text "Product" ]
+              [ onClick address ShowCategoryFilter]
+              [ text "Category" ]
           , button
               [ onClick address ShowStyleFilter ]
               [ text "Style" ]

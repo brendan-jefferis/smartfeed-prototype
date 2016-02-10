@@ -190,7 +190,7 @@ view address model =
             [ ]
             [ h6
                 [ class "subheader" ]
-                [ text "Colours featured in these products" ]
+                [ text "Colours found in these products" ]
             , ul
                 [ class "blank colour-palette" ]
                 (List.map (colourCell address featuredPaletteCellCount model.selectedPalette.colours) model.featuredPalette.colours)
