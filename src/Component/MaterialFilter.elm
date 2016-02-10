@@ -3,6 +3,7 @@ module Component.MaterialFilter (Model, init, Action, update, view) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import String
 
 import Common.Alias exposing (Material, MaterialSelector)
 import Common.CheckRow as CheckRow
@@ -83,7 +84,7 @@ listItem address selectedMaterials material =
     label =
       case material.modifier of
         Just val ->
-          val ++ " " ++ material.name
+          val ++ " " ++ (String.toLower material.name)
 
         Nothing ->
           material.name

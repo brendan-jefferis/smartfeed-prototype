@@ -11593,21 +11593,6 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
               _U.list([$Html$Attributes.$class("fa fa-search search-icon")]),
               _U.list([]))]));
    });
-   var materialFilterListItem = F2(function (address,material) {
-      return A2($Html.li,
-      _U.list([]),
-      _U.list([$Common$Tag.view(material)]));
-   });
-   var materialFilterGroup = F2(function (address,filter) {
-      return A2($Html.div,
-      _U.list([]),
-      _U.list([A2($Html.h4,
-              _U.list([$Html$Attributes.$class("subheader")]),
-              _U.list([$Html.text("Material")]))
-              ,A2($Html.ul,
-              _U.list([$Html$Attributes.$class("blank")]),
-              A2($List.map,materialFilterListItem(address),filter))]));
-   });
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
@@ -11615,7 +11600,7 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
          case "ShowFilterPanel": return _U.update(model,
            {filter: model.masterFilter,isFilterPanelVisible: true});
          case "HideFilterPanel": return _U.update(model,
-           {isFilterPanelVisible: false});
+           {filter: model.masterFilter,isFilterPanelVisible: false});
          case "RemoveColourFilter":
          var selectedPalette = model.filter.colour;
            var updatedPalette = _U.update(selectedPalette,
@@ -11626,6 +11611,14 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
            selectedPalette.colours)});
            var filter = model.filter;
            var updatedFilter = _U.update(filter,{colour: updatedPalette});
+           return _U.update(model,{filter: updatedFilter});
+         case "RemoveMaterialFilter": var filter = model.filter;
+           var updatedFilter = _U.update(filter,
+           {material: A2($List.filter,
+           function (c) {
+              return !_U.eq(c,_p0._0);
+           },
+           model.filter.material)});
            return _U.update(model,{filter: updatedFilter});
          case "RemoveCategoryFilter": var filter = model.filter;
            var updatedFilter = _U.update(filter,
@@ -11644,7 +11637,9 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
            model.filter.style)});
            return _U.update(model,{filter: updatedFilter});
          default: return _U.update(model,
-           {isFilteringComplete: true,isFilterPanelVisible: false});}
+           {masterFilter: model.filter
+           ,isFilteringComplete: true
+           ,isFilterPanelVisible: false});}
    });
    var Done = {ctor: "Done"};
    var RemoveStyleFilter = function (a) {
@@ -11686,6 +11681,36 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
               ,A2($Html.ul,
               _U.list([$Html$Attributes.$class("blank")]),
               A2($List.map,categoryFilterListItem(address),filter))]));
+   });
+   var RemoveMaterialFilter = function (a) {
+      return {ctor: "RemoveMaterialFilter",_0: a};
+   };
+   var materialFilterListItem = F2(function (address,material) {
+      var materialName = function () {
+         var _p1 = material.modifier;
+         if (_p1.ctor === "Just") {
+               return A2($Basics._op["++"],
+               _p1._0,
+               A2($Basics._op["++"]," ",$String.toLower(material.name)));
+            } else {
+               return material.name;
+            }
+      }();
+      return A2($Html.li,
+      _U.list([A2($Html$Events.onClick,
+      address,
+      RemoveMaterialFilter(material))]),
+      _U.list([$Common$Tag.view(materialName)]));
+   });
+   var materialFilterGroup = F2(function (address,filter) {
+      return A2($Html.div,
+      _U.list([]),
+      _U.list([A2($Html.h4,
+              _U.list([$Html$Attributes.$class("subheader")]),
+              _U.list([$Html.text("Material")]))
+              ,A2($Html.ul,
+              _U.list([$Html$Attributes.$class("blank")]),
+              A2($List.map,materialFilterListItem(address),filter))]));
    });
    var RemoveColourFilter = function (a) {
       return {ctor: "RemoveColourFilter",_0: a};
@@ -11743,11 +11768,7 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
                       _U.list([]))
                       ,_U.cmp(materialCount,0) > 0 ? A2(materialFilterGroup,
                       address,
-                      A2($List.map,
-                      function (_) {
-                         return _.name;
-                      },
-                      model.filter.material)) : A2($Html.div,_U.list([]),_U.list([]))
+                      model.filter.material) : A2($Html.div,_U.list([]),_U.list([]))
                       ,_U.cmp(productCount,0) > 0 ? A2(categoryFilterGroup,
                       address,
                       model.filter.category) : A2($Html.div,_U.list([]),_U.list([]))
@@ -12106,7 +12127,8 @@ Elm.Component.MaterialFilter.make = function (_elm) {
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
    var _op = {};
    var update = F2(function (action,model) {
       var _p0 = action;
@@ -12145,7 +12167,7 @@ Elm.Component.MaterialFilter.make = function (_elm) {
          if (_p2.ctor === "Just") {
                return A2($Basics._op["++"],
                _p2._0,
-               A2($Basics._op["++"]," ",material.name));
+               A2($Basics._op["++"]," ",$String.toLower(material.name)));
             } else {
                return material.name;
             }

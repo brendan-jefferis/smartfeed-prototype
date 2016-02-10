@@ -6,7 +6,7 @@ import Html.Events exposing (onClick)
 import String
 
 import Common.Tag as Tag
-import Common.Alias exposing (Filter, PaletteColour)
+import Common.Alias exposing (Filter, PaletteColour, Material)
 
 
 type alias Model =
@@ -29,6 +29,7 @@ type Action
   | ShowFilterPanel
   | HideFilterPanel
   | RemoveColourFilter Common.Alias.PaletteColour
+  | RemoveMaterialFilter Common.Alias.Material
   | RemoveCategoryFilter String
   | RemoveStyleFilter String
   | Done
@@ -47,7 +48,8 @@ update action model =
 
     HideFilterPanel ->
       { model |
-          isFilterPanelVisible = False
+          filter = model.masterFilter
+        , isFilterPanelVisible = False
       }
 
     RemoveColourFilter paletteColour ->
@@ -61,6 +63,18 @@ update action model =
         updatedFilter =
           { filter |
               colour = updatedPalette
+          }
+      in
+        { model |
+            filter = updatedFilter
+        }
+
+    RemoveMaterialFilter material ->
+      let
+        filter = model.filter
+        updatedFilter =
+          { filter |
+              material = List.filter (\c -> c /= material) model.filter.material
           }
       in
         { model |
@@ -93,7 +107,8 @@ update action model =
 
     Done ->
       { model |
-          isFilteringComplete = True
+          masterFilter = model.filter
+        , isFilteringComplete = True
         , isFilterPanelVisible = False
       }
 
@@ -157,14 +172,23 @@ styleFilterGroup address filter =
         (List.map (styleFilterListItem address) filter)
     ]
 
-materialFilterListItem : Signal.Address Action -> String -> Html
+materialFilterListItem : Signal.Address Action -> Material -> Html
 materialFilterListItem address material =
-  li
-    [ ]
-    [ Tag.view material
-    ]
+  let
+    materialName = 
+      case material.modifier of
+        Just mod ->
+          mod ++ " " ++ (String.toLower material.name)
 
-materialFilterGroup : Signal.Address Action -> List String -> Html
+        Nothing ->
+          material.name
+  in
+    li
+      [ onClick address (RemoveMaterialFilter material)]
+      [ Tag.view materialName
+      ]
+
+materialFilterGroup : Signal.Address Action -> List Material -> Html
 materialFilterGroup address filter =
   div
     [ ]
@@ -229,7 +253,7 @@ view address model =
                   else
                     div [] []
                 , if materialCount > 0 then
-                    (materialFilterGroup address (List.map .name model.filter.material))
+                    (materialFilterGroup address model.filter.material)
                   else
                     div [] []
                 , if productCount > 0 then
