@@ -30,7 +30,6 @@ _ReSharper*/
 
 elm-stuff
 css/.sass-cache
-gen/*.js
 *.scssc
 *.elmi
 *.elmo
