@@ -7,6 +7,8 @@ $default-padding: 8px;
 $default-color: #444;
 $icon-size: 18px;
 
+body.mobile .smart-feed .active-filter { position: fixed; }
+
 .smart-feed {
 	height: 100%;
 	overflow: hidden;
@@ -124,7 +126,7 @@ $icon-size: 18px;
 	}
 
 	.active-filter {
-		position: fixed;
+		position: absolute;
 		width: 100%;
 
 		.active-filter-bar {
@@ -175,7 +177,7 @@ $icon-size: 18px;
 		@include blank-list();
 		
 		.tile {
-			width: 304px;
+			width: 100%;
 			background: $light-grey;
 			border-radius: 2px;
 			margin-bottom: 16px;
@@ -207,7 +209,7 @@ $icon-size: 18px;
 				}
 
 				.tile-photo {
-
+					width: 100%;
 				}
 
 				.footer-row {

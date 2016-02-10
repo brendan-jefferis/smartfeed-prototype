@@ -1,3 +1,6 @@
+body.mobile .smart-feed .active-filter {
+  position: fixed; }
+
 .smart-feed {
   height: 100%;
   overflow: hidden;
@@ -76,7 +79,7 @@
       font-size: 18px;
       color: #444; }
   .smart-feed .active-filter {
-    position: fixed;
+    position: absolute;
     width: 100%; }
     .smart-feed .active-filter .active-filter-bar {
       background: #222;
@@ -111,7 +114,7 @@
     padding: 0;
     list-style: none; }
     .smart-feed .tile-list .tile {
-      width: 304px;
+      width: 100%;
       background: #f3f3f3;
       border-radius: 2px;
       margin-bottom: 16px; }
@@ -131,6 +134,8 @@
           color: #444;
           line-height: 11px;
           vertical-align: middle; }
+      .smart-feed .tile-list .tile .tile-contents .tile-photo {
+        width: 100%; }
       .smart-feed .tile-list .tile .tile-contents .footer-row {
         padding: 8px; }
         .smart-feed .tile-list .tile .tile-contents .footer-row span {
