@@ -171,6 +171,7 @@ body.mobile .smart-feed .tile-detail { position: fixed; }
 		overflow: auto;
 		background: #444;
 		padding: 8px;
+		margin-top: 48px;
 		@include no-scrollbar();
 	}
 
@@ -320,7 +321,7 @@ body.mobile .smart-feed .tile-detail { position: fixed; }
 
 					button {
 						padding: 0;
-						width: 70px;
+						width: calc(25% - 6px);
 
 						&:not(:first-of-type) {
 							margin-left: $default-padding;
@@ -381,6 +382,11 @@ body.mobile .smart-feed .tile-detail { position: fixed; }
 					&.style-filter {
 
 					}
+
+				}
+				
+				.action {
+					margin-top: 20px;
 				}
 			}
 		}

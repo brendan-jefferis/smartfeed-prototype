@@ -12572,7 +12572,7 @@ Elm.Component.SmartFeedTileDetail.make = function (_elm) {
                       _U.list([$Html.text("Style")]))]))
               ,currentFilter
               ,!_U.eq(model.visibleFilter,None) ? A2($Html.div,
-              _U.list([$Html$Attributes.$class("content-right")]),
+              _U.list([$Html$Attributes.$class("action content-right")]),
               _U.list([A2($Html.button,
               _U.list([A2($Html$Events.onClick,address,SaveAndContinue)]),
               _U.list([$Html.text("Save and continue")]))])) : A2($Html.div,

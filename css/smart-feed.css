@@ -107,7 +107,8 @@ body.mobile .smart-feed .tile-detail {
     height: 100%;
     overflow: auto;
     background: #444;
-    padding: 8px; }
+    padding: 8px;
+    margin-top: 48px; }
     .smart-feed .scrollable-list::-webkit-scrollbar {
       width: 0; }
   .smart-feed .tile-list {
@@ -205,7 +206,7 @@ body.mobile .smart-feed .tile-detail {
         margin-top: 4px; }
         .smart-feed .tile-detail .tile-detail-contents .filter-container .action-row button {
           padding: 0;
-          width: 70px; }
+          width: calc(25% - 6px); }
           .smart-feed .tile-detail .tile-detail-contents .filter-container .action-row button:not(:first-of-type) {
             margin-left: 8px; }
       .smart-feed .tile-detail .tile-detail-contents .filter-container .filter-panel h6.subheader {
@@ -230,3 +231,5 @@ body.mobile .smart-feed .tile-detail {
           font-family: 'FontAwesome';
           color: white;
           text-shadow: 0 0 1px #0a0a0a; }
+      .smart-feed .tile-detail .tile-detail-contents .filter-container .action {
+        margin-top: 20px; }

@@ -209,7 +209,7 @@ filterView address model =
       , currentFilter
       , if model.visibleFilter /= None then
           div
-              [ class "content-right" ]
+              [ class "action content-right" ]
               [ button
                   [ onClick address SaveAndContinue ]
                   [ text "Save and continue"]
