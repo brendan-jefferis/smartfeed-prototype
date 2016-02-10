@@ -11613,7 +11613,7 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
       switch (_p0.ctor)
       {case "NoOp": return model;
          case "ShowFilterPanel": return _U.update(model,
-           {isFilterPanelVisible: true});
+           {filter: model.masterFilter,isFilterPanelVisible: true});
          case "HideFilterPanel": return _U.update(model,
            {isFilterPanelVisible: false});
          case "RemoveColourFilter":
@@ -11766,13 +11766,15 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
    var NoOp = {ctor: "NoOp"};
    var init = function (filter) {
       return {filter: filter
+             ,masterFilter: filter
              ,isFilterPanelVisible: false
              ,isFilteringComplete: false};
    };
-   var Model = F3(function (a,b,c) {
+   var Model = F4(function (a,b,c,d) {
       return {filter: a
-             ,isFilterPanelVisible: b
-             ,isFilteringComplete: c};
+             ,masterFilter: b
+             ,isFilterPanelVisible: c
+             ,isFilteringComplete: d};
    });
    return _elm.Component.ActiveFilterPanel.values = {_op: _op
                                                     ,init: init
@@ -12703,7 +12705,7 @@ Elm.Component.SmartFeed.make = function (_elm) {
            return _U.update(model,
            {tileDetail: tileDetail
            ,filter: tileDetail.filteringComplete ? updatedFilter : model.filter
-           ,activeFilterPanel: $Component$ActiveFilterPanel.init(updatedFilter)
+           ,activeFilterPanel: $Component$ActiveFilterPanel.init(tileDetail.filteringComplete ? updatedFilter : model.filter)
            ,isTileDetailView: showTileDetail});
          case "ShowTileDetail":
          var tileDetail = A2($Component$SmartFeedTileDetail.init,
@@ -12760,7 +12762,10 @@ Elm.Component.SmartFeed.make = function (_elm) {
               _U.list([$Html$Attributes.$class("scrollable-list")]),
               _U.list([A2($Html.ul,
               _U.list([$Html$Attributes.$class("tile-list")]),
-              A2($List.map,tileList(address),model.tiles))]))]));
+              A2($List.map,tileList(address),model.tiles))]))
+              ,A2($Html.p,
+              _U.list([$Html$Attributes.id("debug")]),
+              _U.list([$Html.text($Basics.toString(model.filter))]))]));
    });
    var NoOp = {ctor: "NoOp"};
    var Model = F5(function (a,b,c,d,e) {

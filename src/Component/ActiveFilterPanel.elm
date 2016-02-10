@@ -11,6 +11,7 @@ import Common.Alias exposing (Filter, PaletteColour)
 
 type alias Model =
   { filter : Common.Alias.Filter
+  , masterFilter : Common.Alias.Filter
   , isFilterPanelVisible : Bool
   , isFilteringComplete : Bool
   }
@@ -18,6 +19,7 @@ type alias Model =
 init : Filter -> Model
 init filter =
   { filter = filter
+  , masterFilter = filter
   , isFilterPanelVisible = False
   , isFilteringComplete = False
   }
@@ -39,7 +41,8 @@ update action model =
 
     ShowFilterPanel ->
       { model |
-          isFilterPanelVisible = True
+          filter = model.masterFilter
+        , isFilterPanelVisible = True
       }
 
     HideFilterPanel ->

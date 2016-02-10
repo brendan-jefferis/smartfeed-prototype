@@ -195,7 +195,7 @@ update action model =
         { model |
             tileDetail = tileDetail
           , filter = if tileDetail.filteringComplete then updatedFilter else model.filter
-          , activeFilterPanel = ActiveFilterPanel.init updatedFilter
+          , activeFilterPanel = ActiveFilterPanel.init (if tileDetail.filteringComplete then updatedFilter else model.filter)
           , isTileDetailView = showTileDetail
         }
 
@@ -258,4 +258,5 @@ view address model =
             [ class "tile-list" ]
             (List.map (tileList address) model.tiles)
         ]
+    , p [ id "debug" ] [ text (toString model.filter)]
     ]
