@@ -12,11 +12,13 @@ import Component.SmartFeed as SmartFeed
 
 type alias Model =
   { smartFeed : SmartFeed.Model
+  , isDeviceMobile : Bool
   }
 
-init : Model
-init =
+init : Bool -> Model
+init isDeviceMobile =
   { smartFeed = SmartFeed.init
+  , isDeviceMobile = isDeviceMobile
   }
 
 
@@ -60,17 +62,23 @@ view : Signal.Address Action -> Model -> Html
 view address model =
   div
     [ ]
-    [ h4
-        [ ]
-        [ text "SmartFeed Prototype"]
-    , p
-        [ class "subheader" ]
-        [ text "Revision 1" ]
-    , div
-        [ class "mobile-sim-container ratio-16-9" ]
-        [ mockDeviceNav
-        , SmartFeed.view (Signal.forwardTo address SmartFeed) model.smartFeed
-        ]
+    [ if model.isDeviceMobile then
+        SmartFeed.view (Signal.forwardTo address SmartFeed) model.smartFeed
+      else
+        div
+          [ ]
+          [ h4
+              [ ]
+              [ text "SmartFeed Prototype"]
+          , p
+              [ class "subheader" ]
+              [ text "Revision 1" ]
+          , div
+              [ class "mobile-sim-container ratio-16-9" ]
+              [ mockDeviceNav
+              , SmartFeed.view (Signal.forwardTo address SmartFeed) model.smartFeed
+              ]
+          ]
     ]
 
 
@@ -82,6 +90,6 @@ actions : Signal.Mailbox Action
 actions =
   Signal.mailbox NoOp
 
-model : Signal Model
-model =
-  Signal.foldp update init actions.signal
+model : Bool -> Signal Model
+model isDeviceMobile =
+  Signal.foldp update (init isDeviceMobile) actions.signal

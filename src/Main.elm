@@ -13,7 +13,10 @@ import Component.MobileSimulator exposing (init, update, view)
 main : Signal Html
 main =
   start
-    { model = init
+    { model = init isDeviceMobile
     , update = update
     , view = view
     }
+
+
+port isDeviceMobile : Bool
