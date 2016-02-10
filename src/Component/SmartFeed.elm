@@ -94,7 +94,29 @@ dummyProductsTwo =
 
 dummyTiles : List Tile.Model
 dummyTiles =
-  [ { tileId = 1
+  [ { tileId = 3
+    , brand = "Freedom Furniture"
+    , logoUrl = "/images/logo/freedom-logo.png"
+    , title = "Dahlia sofa"
+    , photoUrl = "/images/product/dahlia-sofa.png"
+    , isFavourite = False
+    , url = "/tile/3"
+    , products =
+      [{ title = "Dahlia sofa"
+      , description = "This is the first product"
+      , price = 12.99
+      , isFavourite = False
+      , isInCart = False
+      , photoUrl = "/images/product/dahlia-sofa.png"
+      , thumbnailUrl = "/images/thumbnail/dahlia-sofa.png"
+      , url = "/products/1"
+      , category = "Sofas"
+      }]
+    , palette = { name = Nothing, colours = [{ name = "Grey", hex = "#D3D0CB" }, { name = "Fawn", hex = "#AC9C82" }] }
+    , materials = [{name = "Fabric", modifier = Just "Cotton" }, {name = "Metal", modifier = Just "Brass"}, {name = "Wood", modifier = Just "Light"}]
+    , styles = ["Scandinavian"]
+    }
+  , { tileId = 1
     , brand = "Freedom Furniture"
     , logoUrl = "/images/logo/freedom-logo.png"
     , title = "Nordic inspired"
@@ -117,28 +139,6 @@ dummyTiles =
     , palette = { name = Nothing, colours = [{ name = "Midnight", hex = "#211F20"}, {name = "Slate", hex = "#47464B"}, {name = "Light Cyan", hex = "#7ED3D0"}, {name = "Brick", hex = "#CA3727"}, {name = "Lemon tree", hex = "#E3CD2A"}] }
     , materials = [{name = "Leather", modifier = Nothing}, {name = "Metal", modifier = Just "Brushed"}, {name = "Fabric", modifier = Just "Linen"}, {name = "Wood", modifier = Nothing}]
     , styles = ["Contemporary", "Industrial modern", "Vintage"]
-    }
-  , { tileId = 3
-    , brand = "Freedom Furniture"
-    , logoUrl = "/images/logo/freedom-logo.png"
-    , title = "Dahlia sofa"
-    , photoUrl = "/images/product/dahlia-sofa.png"
-    , isFavourite = False
-    , url = "/tile/3"
-    , products =
-      [{ title = "Dahlia sofa"
-      , description = "This is the first product"
-      , price = 12.99
-      , isFavourite = False
-      , isInCart = False
-      , photoUrl = "/images/product/dahlia-sofa.png"
-      , thumbnailUrl = "/images/thumbnail/dahlia-sofa.png"
-      , url = "/products/1"
-      , category = "Sofas"
-      }]
-    , palette = { name = Nothing, colours = [{ name = "Grey", hex = "#D3D0CB" }, { name = "Fawn", hex = "#AC9C82" }] }
-    , materials = [{name = "Fabric", modifier = Just "Cotton" }, {name = "Metal", modifier = Just "Brass"}, {name = "Wood", modifier = Just "Light"}]
-    , styles = ["Scandinavian"]
     }
   ]
 

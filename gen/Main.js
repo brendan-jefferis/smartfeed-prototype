@@ -12838,7 +12838,31 @@ Elm.Component.SmartFeed.make = function (_elm) {
                                    ,thumbnailUrl: "/images/thumbnail/ceiling-light.png"
                                    ,url: "/products/4"
                                    ,category: "Ceiling lights"}]);
-   var dummyTiles = _U.list([{tileId: 1
+   var dummyTiles = _U.list([{tileId: 3
+                             ,brand: "Freedom Furniture"
+                             ,logoUrl: "/images/logo/freedom-logo.png"
+                             ,title: "Dahlia sofa"
+                             ,photoUrl: "/images/product/dahlia-sofa.png"
+                             ,isFavourite: false
+                             ,url: "/tile/3"
+                             ,products: _U.list([{title: "Dahlia sofa"
+                                                 ,description: "This is the first product"
+                                                 ,price: 12.99
+                                                 ,isFavourite: false
+                                                 ,isInCart: false
+                                                 ,photoUrl: "/images/product/dahlia-sofa.png"
+                                                 ,thumbnailUrl: "/images/thumbnail/dahlia-sofa.png"
+                                                 ,url: "/products/1"
+                                                 ,category: "Sofas"}])
+                             ,palette: {name: $Maybe.Nothing
+                                       ,colours: _U.list([{name: "Grey",hex: "#D3D0CB"}
+                                                         ,{name: "Fawn",hex: "#AC9C82"}])}
+                             ,materials: _U.list([{name: "Fabric"
+                                                  ,modifier: $Maybe.Just("Cotton")}
+                                                 ,{name: "Metal",modifier: $Maybe.Just("Brass")}
+                                                 ,{name: "Wood",modifier: $Maybe.Just("Light")}])
+                             ,styles: _U.list(["Scandinavian"])}
+                            ,{tileId: 1
                              ,brand: "Freedom Furniture"
                              ,logoUrl: "/images/logo/freedom-logo.png"
                              ,title: "Nordic inspired"
@@ -12878,31 +12902,7 @@ Elm.Component.SmartFeed.make = function (_elm) {
                                                  ,{name: "Wood",modifier: $Maybe.Nothing}])
                              ,styles: _U.list(["Contemporary"
                                               ,"Industrial modern"
-                                              ,"Vintage"])}
-                            ,{tileId: 3
-                             ,brand: "Freedom Furniture"
-                             ,logoUrl: "/images/logo/freedom-logo.png"
-                             ,title: "Dahlia sofa"
-                             ,photoUrl: "/images/product/dahlia-sofa.png"
-                             ,isFavourite: false
-                             ,url: "/tile/3"
-                             ,products: _U.list([{title: "Dahlia sofa"
-                                                 ,description: "This is the first product"
-                                                 ,price: 12.99
-                                                 ,isFavourite: false
-                                                 ,isInCart: false
-                                                 ,photoUrl: "/images/product/dahlia-sofa.png"
-                                                 ,thumbnailUrl: "/images/thumbnail/dahlia-sofa.png"
-                                                 ,url: "/products/1"
-                                                 ,category: "Sofas"}])
-                             ,palette: {name: $Maybe.Nothing
-                                       ,colours: _U.list([{name: "Grey",hex: "#D3D0CB"}
-                                                         ,{name: "Fawn",hex: "#AC9C82"}])}
-                             ,materials: _U.list([{name: "Fabric"
-                                                  ,modifier: $Maybe.Just("Cotton")}
-                                                 ,{name: "Metal",modifier: $Maybe.Just("Brass")}
-                                                 ,{name: "Wood",modifier: $Maybe.Just("Light")}])
-                             ,styles: _U.list(["Scandinavian"])}]);
+                                              ,"Vintage"])}]);
    var init = {tiles: dummyTiles
               ,isTileDetailView: false
               ,tileDetail: A2($Component$SmartFeedTileDetail.init,
