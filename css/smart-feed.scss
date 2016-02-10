@@ -7,7 +7,8 @@ $default-padding: 8px;
 $default-color: #444;
 $icon-size: 18px;
 
-body.mobile .smart-feed .active-filter { position: fixed; }
+body.mobile .smart-feed .active-filter,
+body.mobile .smart-feed .tile-detail { position: fixed; }
 
 .smart-feed {
 	height: 100%;
@@ -131,7 +132,7 @@ body.mobile .smart-feed .active-filter { position: fixed; }
 
 		.active-filter-bar {
 			background: #222;
-			padding: 6px;
+			padding: 6px 6px 6px 12px;
 			min-height: 38px;
 
 			.status-indicator {
@@ -143,7 +144,7 @@ body.mobile .smart-feed .active-filter { position: fixed; }
 
 			button {
 				position: absolute;
-				right: 6px;
+				right: 12px;
 			}
 
 			.filter-panel {

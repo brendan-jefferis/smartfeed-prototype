@@ -1,4 +1,5 @@
-body.mobile .smart-feed .active-filter {
+body.mobile .smart-feed .active-filter,
+body.mobile .smart-feed .tile-detail {
   position: fixed; }
 
 .smart-feed {
@@ -83,7 +84,7 @@ body.mobile .smart-feed .active-filter {
     width: 100%; }
     .smart-feed .active-filter .active-filter-bar {
       background: #222;
-      padding: 6px;
+      padding: 6px 6px 6px 12px;
       min-height: 38px; }
       .smart-feed .active-filter .active-filter-bar .status-indicator {
         font-style: italic;
@@ -92,7 +93,7 @@ body.mobile .smart-feed .active-filter {
         line-height: 38px; }
       .smart-feed .active-filter .active-filter-bar button {
         position: absolute;
-        right: 6px; }
+        right: 12px; }
       .smart-feed .active-filter .active-filter-bar .filter-panel {
         color: #f3f3f3;
         padding: 10px 8px; }
