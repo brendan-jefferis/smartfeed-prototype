@@ -11775,14 +11775,14 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
                       ,_U.cmp(styleCount,0) > 0 ? A2(styleFilterGroup,
                       address,
                       model.filter.style) : A2($Html.div,_U.list([]),_U.list([]))
-                      ,A2($Html.div,
+                      ,isFiltered(model.masterFilter) ? A2($Html.div,
                       _U.list([$Html$Attributes.$class("content-right")]),
                       _U.list([A2($Html.button,
                       _U.list([$Html$Attributes.$class("secondary")
                               ,A2($Html$Events.onClick,address,Done)]),
-                      _U.list([$Html.text("Done")]))]))])) : A2($Html.div,
-              _U.list([]),
-              _U.list([]))]))]));
+                      _U.list([$Html.text("Done")]))])) : A2($Html.div,
+                      _U.list([]),
+                      _U.list([]))])) : A2($Html.div,_U.list([]),_U.list([]))]))]));
    });
    var NoOp = {ctor: "NoOp"};
    var init = function (filter) {

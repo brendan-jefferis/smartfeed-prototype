@@ -264,14 +264,17 @@ view address model =
                     (styleFilterGroup address model.filter.style)
                   else
                     div [] []
-                , div
-                    [ class "content-right" ]
-                    [ button
-                        [ class "secondary"
-                        , onClick address Done
-                        ]
-                        [ text "Done" ]
-                    ]
+                , if (isFiltered model.masterFilter) then
+                    div
+                      [ class "content-right" ]
+                      [ button
+                          [ class "secondary"
+                          , onClick address Done
+                          ]
+                          [ text "Done" ]
+                      ]
+                  else
+                    div [] []
                 ]
             else
               div [] []
