@@ -7,7 +7,7 @@ import String
 
 import Common.Tag as Tag
 import Common.Alias exposing (Filter, PaletteColour, Material)
-
+import Common.Util as Util
 
 type alias Model =
   { filter : Common.Alias.Filter
@@ -174,19 +174,10 @@ styleFilterGroup address filter =
 
 materialFilterListItem : Signal.Address Action -> Material -> Html
 materialFilterListItem address material =
-  let
-    materialName = 
-      case material.modifier of
-        Just mod ->
-          mod ++ " " ++ (String.toLower material.name)
-
-        Nothing ->
-          material.name
-  in
-    li
-      [ onClick address (RemoveMaterialFilter material)]
-      [ Tag.view materialName
-      ]
+  li
+    [ onClick address (RemoveMaterialFilter material)]
+    [ Tag.view (Util.materialToString material)
+    ]
 
 materialFilterGroup : Signal.Address Action -> List Material -> Html
 materialFilterGroup address filter =

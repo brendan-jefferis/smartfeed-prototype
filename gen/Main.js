@@ -11533,6 +11533,36 @@ Elm.Common.Tag.make = function (_elm) {
                                    ,view: view
                                    ,viewWithSwatch: viewWithSwatch};
 };
+Elm.Common = Elm.Common || {};
+Elm.Common.Util = Elm.Common.Util || {};
+Elm.Common.Util.make = function (_elm) {
+   "use strict";
+   _elm.Common = _elm.Common || {};
+   _elm.Common.Util = _elm.Common.Util || {};
+   if (_elm.Common.Util.values) return _elm.Common.Util.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Common$Alias = Elm.Common.Alias.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var materialToString = function (material) {
+      var _p0 = material.modifier;
+      if (_p0.ctor === "Just") {
+            return A2($Basics._op["++"],
+            _p0._0,
+            A2($Basics._op["++"]," ",$String.toLower(material.name)));
+         } else {
+            return material.name;
+         }
+   };
+   return _elm.Common.Util.values = {_op: _op
+                                    ,materialToString: materialToString};
+};
 Elm.Component = Elm.Component || {};
 Elm.Component.ActiveFilterPanel = Elm.Component.ActiveFilterPanel || {};
 Elm.Component.ActiveFilterPanel.make = function (_elm) {
@@ -11545,6 +11575,7 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
    $Basics = Elm.Basics.make(_elm),
    $Common$Alias = Elm.Common.Alias.make(_elm),
    $Common$Tag = Elm.Common.Tag.make(_elm),
+   $Common$Util = Elm.Common.Util.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
@@ -11686,21 +11717,11 @@ Elm.Component.ActiveFilterPanel.make = function (_elm) {
       return {ctor: "RemoveMaterialFilter",_0: a};
    };
    var materialFilterListItem = F2(function (address,material) {
-      var materialName = function () {
-         var _p1 = material.modifier;
-         if (_p1.ctor === "Just") {
-               return A2($Basics._op["++"],
-               _p1._0,
-               A2($Basics._op["++"]," ",$String.toLower(material.name)));
-            } else {
-               return material.name;
-            }
-      }();
       return A2($Html.li,
       _U.list([A2($Html$Events.onClick,
       address,
       RemoveMaterialFilter(material))]),
-      _U.list([$Common$Tag.view(materialName)]));
+      _U.list([$Common$Tag.view($Common$Util.materialToString(material))]));
    });
    var materialFilterGroup = F2(function (address,filter) {
       return A2($Html.div,
@@ -12120,6 +12141,7 @@ Elm.Component.MaterialFilter.make = function (_elm) {
    $Basics = Elm.Basics.make(_elm),
    $Common$Alias = Elm.Common.Alias.make(_elm),
    $Common$CheckRow = Elm.Common.CheckRow.make(_elm),
+   $Common$Util = Elm.Common.Util.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
@@ -12127,8 +12149,7 @@ Elm.Component.MaterialFilter.make = function (_elm) {
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm);
+   $Signal = Elm.Signal.make(_elm);
    var _op = {};
    var update = F2(function (action,model) {
       var _p0 = action;
@@ -12162,21 +12183,13 @@ Elm.Component.MaterialFilter.make = function (_elm) {
    material) {
       var checked = A2($List.member,material,selectedMaterials);
       var clickAction = checked ? DeselectMaterial : SelectMaterial;
-      var label = function () {
-         var _p2 = material.modifier;
-         if (_p2.ctor === "Just") {
-               return A2($Basics._op["++"],
-               _p2._0,
-               A2($Basics._op["++"]," ",$String.toLower(material.name)));
-            } else {
-               return material.name;
-            }
-      }();
       return A2($Html.li,
       _U.list([A2($Html$Events.onClick,
       address,
       clickAction(material))]),
-      _U.list([A2($Common$CheckRow.view,label,checked)]));
+      _U.list([A2($Common$CheckRow.view,
+      $Common$Util.materialToString(material),
+      checked)]));
    });
    var view = F2(function (address,model) {
       var featuredMaterialsCount = $List.length(model.featuredMaterials);
@@ -12228,10 +12241,10 @@ Elm.Component.MaterialFilter.make = function (_elm) {
              ,filteringComplete: d};
    });
    var dummyMaterials = _U.list([{name: "Wood"
-                                 ,modifier: $Maybe.Just("")}
-                                ,{name: "Metal",modifier: $Maybe.Just("")}
-                                ,{name: "Fabric",modifier: $Maybe.Just("")}
-                                ,{name: "Leather",modifier: $Maybe.Just("")}]);
+                                 ,modifier: $Maybe.Nothing}
+                                ,{name: "Metal",modifier: $Maybe.Nothing}
+                                ,{name: "Fabric",modifier: $Maybe.Nothing}
+                                ,{name: "Leather",modifier: $Maybe.Nothing}]);
    var init = F2(function (selectedMaterials,featuredMaterials) {
       return {selectedMaterials: selectedMaterials
              ,featuredMaterials: featuredMaterials
@@ -12291,7 +12304,7 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
                       ,A2($Html.div,
                       _U.list([$Html$Attributes.$class("actions")]),
                       _U.list([A2($Html.i,
-                              _U.list([$Html$Attributes.$class("fa fa-ellipsis-h")]),
+                              _U.list([$Html$Attributes.$class("fa fa-share")]),
                               _U.list([]))
                               ,A2($Html.i,
                               _U.list([$Html$Attributes.$class("fa fa-envelope-o")]),
@@ -12698,6 +12711,7 @@ Elm.Component.SmartFeed.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Common$Alias = Elm.Common.Alias.make(_elm),
+   $Common$Util = Elm.Common.Util.make(_elm),
    $Component$ActiveFilterPanel = Elm.Component.ActiveFilterPanel.make(_elm),
    $Component$SmartFeedTile = Elm.Component.SmartFeedTile.make(_elm),
    $Component$SmartFeedTileDetail = Elm.Component.SmartFeedTileDetail.make(_elm),
@@ -12710,6 +12724,25 @@ Elm.Component.SmartFeed.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var logFilter = function (filter) {
+      return A2($Basics._op["++"],
+      "Colour: ",
+      A2($Basics._op["++"],
+      $Basics.toString(filter.colour.colours),
+      A2($Basics._op["++"],
+      ", Material: ",
+      A2($Basics._op["++"],
+      $Basics.toString(A2($List.map,
+      $Common$Util.materialToString,
+      filter.material)),
+      A2($Basics._op["++"],
+      ", Category: ",
+      A2($Basics._op["++"],
+      $Basics.toString(filter.category),
+      A2($Basics._op["++"],
+      ", Style: ",
+      $Basics.toString(filter.style))))))));
+   };
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
@@ -12787,7 +12820,7 @@ Elm.Component.SmartFeed.make = function (_elm) {
               A2($List.map,tileList(address),model.tiles))]))
               ,A2($Html.p,
               _U.list([$Html$Attributes.id("debug")]),
-              _U.list([$Html.text($Basics.toString(model.filter))]))]));
+              _U.list([$Html.text(logFilter(model.filter))]))]));
    });
    var NoOp = {ctor: "NoOp"};
    var Model = F5(function (a,b,c,d,e) {

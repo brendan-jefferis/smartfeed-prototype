@@ -3,19 +3,19 @@ module Component.MaterialFilter (Model, init, Action, update, view) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import String
 
 import Common.Alias exposing (Material, MaterialSelector)
 import Common.CheckRow as CheckRow
+import Common.Util as Util
 
 --======================================| DUMMY DATA |
 
 dummyMaterials : List Material
 dummyMaterials =
-  [ { name = "Wood", modifier = Just ""}
-  , { name = "Metal", modifier = Just "" }
-  , { name = "Fabric", modifier = Just "" }
-  , { name = "Leather", modifier = Just ""}
+  [ { name = "Wood", modifier = Nothing }
+  , { name = "Metal", modifier = Nothing }
+  , { name = "Fabric", modifier = Nothing }
+  , { name = "Leather", modifier = Nothing }
   ]
 
 --======================================| MODEL |
@@ -81,20 +81,12 @@ update action model =
 listItem : Signal.Address Action -> List Material -> Material -> Html
 listItem address selectedMaterials material =
   let
-    label =
-      case material.modifier of
-        Just val ->
-          val ++ " " ++ (String.toLower material.name)
-
-        Nothing ->
-          material.name
-
     checked = List.member material selectedMaterials
     clickAction = if checked then DeselectMaterial else SelectMaterial
   in
     li
       [ onClick address (clickAction material) ]
-      [ CheckRow.view label checked ]
+      [ CheckRow.view (Util.materialToString material) checked ]
 
 view : Signal.Address Action -> Model -> Html
 view address model =

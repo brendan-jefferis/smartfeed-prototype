@@ -8,7 +8,7 @@ import Component.ActiveFilterPanel as ActiveFilterPanel
 import Component.SmartFeedTile as Tile
 import Component.SmartFeedTileDetail as TileDetail
 import Common.Alias exposing (Product, Palette, emptyPalette)
-
+import Common.Util as Util
 
 
 
@@ -258,5 +258,12 @@ view address model =
             [ class "tile-list" ]
             (List.map (tileList address) model.tiles)
         ]
-    , p [ id "debug" ] [ text (toString model.filter)]
+    , p
+      [ id "debug" ]
+      [ text (logFilter model.filter)]
     ]
+
+logFilter : Common.Alias.Filter -> String
+logFilter filter =
+  "Colour: " ++ (toString filter.colour.colours) ++ ", Material: " ++ (toString (List.map Util.materialToString filter.material)) ++ ", Category: " ++ (toString filter.category) ++ ", Style: " ++ (toString filter.style)
+

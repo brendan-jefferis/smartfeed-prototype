@@ -77,7 +77,7 @@ view model =
         , div
             [ class "actions" ]
             [ i
-                [ class "fa fa-ellipsis-h" ]
+                [ class "fa fa-share" ]
                 [ ]
             , i
                 [ class "fa fa-envelope-o" ]
