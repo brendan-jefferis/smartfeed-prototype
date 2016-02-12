@@ -1,7 +1,8 @@
-module Component.SmartFeedTile (Model, init, view) where
+module Component.SmartFeedTile (Model, init, Action, update, view) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 
 import Common.Alias exposing (Palette, Material, Product)
 
@@ -21,6 +22,7 @@ type alias Model =
   , palette : Palette
   , materials : List Material
   , styles : List String
+  , showDetail : Bool
   }
 
 init : Model
@@ -36,15 +38,46 @@ init =
   , palette = Common.Alias.emptyPalette
   , materials = Common.Alias.emptyMaterials
   , styles = []
+  , showDetail = False
   }
 
+
+type Action
+  = NoOp
+  | ToggleFavourite
+  | ShowDetail
+  | HideDetail
+
+update : Action -> Model -> Model
+update action model =
+  case action of
+    NoOp ->
+      model
+
+    ToggleFavourite ->
+      let
+        isFavourite = not model.isFavourite
+      in
+        { model |
+            isFavourite = isFavourite
+        }
+
+    ShowDetail ->
+      { model |
+          showDetail = True
+      }
+
+    HideDetail ->
+      { model |
+          showDetail = False
+      }
 
 
 
 --======================================| VIEW |
 
-view : Model -> Html
-view model =
+view : Signal.Address Action -> Model -> Html
+view address model =
   div
     [ class "tile-contents" ]
     [ div
@@ -62,7 +95,9 @@ view model =
             [ text model.brand ]
         ]
     , div
-        [ class "photo-container tile-photo" ]
+        [ class "photo-container tile-photo"
+        , onClick address ShowDetail
+        ]
         [ img
             [ class "tile-photo"
             , src model.photoUrl
@@ -83,7 +118,9 @@ view model =
                 [ class "fa fa-envelope-o" ]
                 [ ]
             , i
-                [ class "fa fa-heart-o" ]
+                [ class ("fa " ++ if model.isFavourite then "fa-heart" else "fa-heart-o")
+                , onClick address ToggleFavourite
+                ]
                 [ ]
             ]
         ]

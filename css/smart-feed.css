@@ -114,7 +114,8 @@ body.mobile .smart-feed .tile-detail {
   .smart-feed .tile-list {
     margin: 0;
     padding: 0;
-    list-style: none; }
+    list-style: none;
+    margin-bottom: 56px; }
     .smart-feed .tile-list .tile {
       width: 100%;
       background: #f3f3f3;
@@ -150,6 +151,8 @@ body.mobile .smart-feed .tile-detail {
             font-size: 18px;
             color: #999;
             margin-left: 16px; }
+            .smart-feed .tile-list .tile .tile-contents .footer-row .actions i.fa-heart {
+              color: #CF2B2B; }
   .smart-feed .tile-detail {
     height: 100%;
     overflow: auto;

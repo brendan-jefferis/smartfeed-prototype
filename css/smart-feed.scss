@@ -177,6 +177,7 @@ body.mobile .smart-feed .tile-detail { position: fixed; }
 
 	.tile-list {
 		@include blank-list();
+		margin-bottom: 56px;
 		
 		.tile {
 			width: 100%;
@@ -230,6 +231,10 @@ body.mobile .smart-feed .tile-detail { position: fixed; }
 							font-size: $icon-size;
 							color: #999;
 							margin-left: ($default-padding * 2);
+
+							&.fa-heart {
+								color: #CF2B2B;
+							}
 						}
 					}
 				}

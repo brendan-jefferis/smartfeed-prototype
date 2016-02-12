@@ -12271,12 +12271,26 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var view = function (model) {
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "NoOp": return model;
+         case "ToggleFavourite":
+         var isFavourite = $Basics.not(model.isFavourite);
+           return _U.update(model,{isFavourite: isFavourite});
+         case "ShowDetail": return _U.update(model,{showDetail: true});
+         default: return _U.update(model,{showDetail: false});}
+   });
+   var HideDetail = {ctor: "HideDetail"};
+   var ShowDetail = {ctor: "ShowDetail"};
+   var ToggleFavourite = {ctor: "ToggleFavourite"};
+   var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("tile-contents")]),
       _U.list([A2($Html.div,
@@ -12291,7 +12305,8 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
                       _U.list([$Html$Attributes.$class("brand-name")]),
                       _U.list([$Html.text(model.brand)]))]))
               ,A2($Html.div,
-              _U.list([$Html$Attributes.$class("photo-container tile-photo")]),
+              _U.list([$Html$Attributes.$class("photo-container tile-photo")
+                      ,A2($Html$Events.onClick,address,ShowDetail)]),
               _U.list([A2($Html.img,
               _U.list([$Html$Attributes.$class("tile-photo")
                       ,$Html$Attributes.src(model.photoUrl)]),
@@ -12310,9 +12325,13 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
                               _U.list([$Html$Attributes.$class("fa fa-envelope-o")]),
                               _U.list([]))
                               ,A2($Html.i,
-                              _U.list([$Html$Attributes.$class("fa fa-heart-o")]),
+                              _U.list([$Html$Attributes.$class(A2($Basics._op["++"],
+                                      "fa ",
+                                      model.isFavourite ? "fa-heart" : "fa-heart-o"))
+                                      ,A2($Html$Events.onClick,address,ToggleFavourite)]),
                               _U.list([]))]))]))]));
-   };
+   });
+   var NoOp = {ctor: "NoOp"};
    var init = {tileId: 0
               ,brand: ""
               ,logoUrl: ""
@@ -12323,7 +12342,8 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
               ,products: _U.list([])
               ,palette: $Common$Alias.emptyPalette
               ,materials: $Common$Alias.emptyMaterials
-              ,styles: _U.list([])};
+              ,styles: _U.list([])
+              ,showDetail: false};
    var Model = function (a) {
       return function (b) {
          return function (c) {
@@ -12335,17 +12355,20 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
                            return function (i) {
                               return function (j) {
                                  return function (k) {
-                                    return {tileId: a
-                                           ,brand: b
-                                           ,logoUrl: c
-                                           ,title: d
-                                           ,photoUrl: e
-                                           ,isFavourite: f
-                                           ,url: g
-                                           ,products: h
-                                           ,palette: i
-                                           ,materials: j
-                                           ,styles: k};
+                                    return function (l) {
+                                       return {tileId: a
+                                              ,brand: b
+                                              ,logoUrl: c
+                                              ,title: d
+                                              ,photoUrl: e
+                                              ,isFavourite: f
+                                              ,url: g
+                                              ,products: h
+                                              ,palette: i
+                                              ,materials: j
+                                              ,styles: k
+                                              ,showDetail: l};
+                                    };
                                  };
                               };
                            };
@@ -12359,6 +12382,7 @@ Elm.Component.SmartFeedTile.make = function (_elm) {
    };
    return _elm.Component.SmartFeedTile.values = {_op: _op
                                                 ,init: init
+                                                ,update: update
                                                 ,view: view
                                                 ,Model: Model};
 };
@@ -12747,6 +12771,48 @@ Elm.Component.SmartFeed.make = function (_elm) {
       var _p0 = action;
       switch (_p0.ctor)
       {case "NoOp": return model;
+         case "TileAction": var updateTiles = function (tileModel) {
+              return _U.eq(tileModel.tileId,
+              _p0._0) ? A2($Component$SmartFeedTile.update,
+              _p0._1,
+              tileModel) : tileModel;
+           };
+           var updatedTiles = A2($List.map,updateTiles,model.tiles);
+           var tileToShowDetail = $List.head(A2($List.filter,
+           function (t) {
+              return _U.eq(t.showDetail,true);
+           },
+           updatedTiles));
+           var isTileDetailView = function () {
+              var _p1 = tileToShowDetail;
+              if (_p1.ctor === "Just") {
+                    return true;
+                 } else {
+                    return false;
+                 }
+           }();
+           var tileDetail = function () {
+              var _p2 = tileToShowDetail;
+              if (_p2.ctor === "Just") {
+                    return A2($Component$SmartFeedTileDetail.init,
+                    _p2._0,
+                    model.filter);
+                 } else {
+                    return A2($Component$SmartFeedTileDetail.init,
+                    $Component$SmartFeedTile.init,
+                    $Common$Alias.emptyFilter);
+                 }
+           }();
+           var favouriteTiles = A2($List.filter,
+           function (t) {
+              return _U.eq(t.isFavourite,true);
+           },
+           updatedTiles);
+           return _U.update(model,
+           {tiles: updatedTiles
+           ,isTileDetailView: isTileDetailView
+           ,tileDetail: tileDetail
+           ,favouriteTiles: favouriteTiles});
          case "TileDetail": var filter = model.filter;
            var tileDetail = A2($Component$SmartFeedTileDetail.update,
            _p0._0,
@@ -12762,14 +12828,12 @@ Elm.Component.SmartFeed.make = function (_elm) {
            ,filter: tileDetail.filteringComplete ? updatedFilter : model.filter
            ,activeFilterPanel: $Component$ActiveFilterPanel.init(tileDetail.filteringComplete ? updatedFilter : model.filter)
            ,isTileDetailView: showTileDetail});
-         case "ShowTileDetail":
-         var tileDetail = A2($Component$SmartFeedTileDetail.init,
-           _p0._0,
-           model.filter);
+         case "HideTileDetail": var reset = function (tile) {
+              return _U.update(tile,{showDetail: false});
+           };
            return _U.update(model,
-           {isTileDetailView: true,tileDetail: tileDetail});
-         case "HideTileDetail": return _U.update(model,
-           {isTileDetailView: false
+           {tiles: A2($List.map,reset,model.tiles)
+           ,isTileDetailView: false
            ,tileDetail: A2($Component$SmartFeedTileDetail.init,
            $Component$SmartFeedTile.init,
            $Common$Alias.emptyFilter)});
@@ -12785,18 +12849,19 @@ Elm.Component.SmartFeed.make = function (_elm) {
       return {ctor: "ActiveFilterPanelActions",_0: a};
    };
    var HideTileDetail = {ctor: "HideTileDetail"};
-   var ShowTileDetail = function (a) {
-      return {ctor: "ShowTileDetail",_0: a};
-   };
-   var tileList = F2(function (address,tile) {
-      return A2($Html.li,
-      _U.list([$Html$Attributes.$class("tile")
-              ,A2($Html$Events.onClick,address,ShowTileDetail(tile))]),
-      _U.list([$Component$SmartFeedTile.view(tile)]));
-   });
    var TileDetail = function (a) {
       return {ctor: "TileDetail",_0: a};
    };
+   var TileAction = F2(function (a,b) {
+      return {ctor: "TileAction",_0: a,_1: b};
+   });
+   var tileList = F2(function (address,tile) {
+      return A2($Html.li,
+      _U.list([$Html$Attributes.$class("tile")]),
+      _U.list([A2($Component$SmartFeedTile.view,
+      A2($Signal.forwardTo,address,TileAction(tile.tileId)),
+      tile)]));
+   });
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("smart-feed")]),
@@ -12820,15 +12885,24 @@ Elm.Component.SmartFeed.make = function (_elm) {
               A2($List.map,tileList(address),model.tiles))]))
               ,A2($Html.p,
               _U.list([$Html$Attributes.id("debug")]),
-              _U.list([$Html.text(logFilter(model.filter))]))]));
+              _U.list([$Html.text(A2($Basics._op["++"],
+              logFilter(model.filter),
+              A2($Basics._op["++"],
+              " favouriteTiles: ",
+              $Basics.toString(A2($List.map,
+              function (_) {
+                 return _.title;
+              },
+              model.favouriteTiles)))))]))]));
    });
    var NoOp = {ctor: "NoOp"};
-   var Model = F5(function (a,b,c,d,e) {
+   var Model = F6(function (a,b,c,d,e,f) {
       return {tiles: a
              ,isTileDetailView: b
              ,tileDetail: c
              ,activeFilterPanel: d
-             ,filter: e};
+             ,filter: e
+             ,favouriteTiles: f};
    });
    var dummyProductsTwo = _U.list([{title: "Product 4"
                                    ,description: "This is the fourth product"
@@ -12916,7 +12990,8 @@ Elm.Component.SmartFeed.make = function (_elm) {
                                                   ,modifier: $Maybe.Just("Cotton")}
                                                  ,{name: "Metal",modifier: $Maybe.Just("Brass")}
                                                  ,{name: "Wood",modifier: $Maybe.Just("Light")}])
-                             ,styles: _U.list(["Scandinavian"])}
+                             ,styles: _U.list(["Scandinavian"])
+                             ,showDetail: false}
                             ,{tileId: 1
                              ,brand: "Freedom Furniture"
                              ,logoUrl: "/images/logo/freedom-logo.png"
@@ -12936,7 +13011,8 @@ Elm.Component.SmartFeed.make = function (_elm) {
                                                   ,modifier: $Maybe.Just("Cotton")}
                                                  ,{name: "Metal",modifier: $Maybe.Just("Brass")}
                                                  ,{name: "Wood",modifier: $Maybe.Just("Light")}])
-                             ,styles: _U.list(["Scandinavian","Bohemian"])}
+                             ,styles: _U.list(["Scandinavian","Bohemian"])
+                             ,showDetail: false}
                             ,{tileId: 2
                              ,brand: "Freedom Furniture"
                              ,logoUrl: "/images/logo/freedom-logo.png"
@@ -12955,16 +13031,16 @@ Elm.Component.SmartFeed.make = function (_elm) {
                                                  ,{name: "Metal",modifier: $Maybe.Just("Brushed")}
                                                  ,{name: "Fabric",modifier: $Maybe.Just("Linen")}
                                                  ,{name: "Wood",modifier: $Maybe.Nothing}])
-                             ,styles: _U.list(["Contemporary"
-                                              ,"Industrial modern"
-                                              ,"Vintage"])}]);
+                             ,styles: _U.list(["Contemporary","Industrial modern","Vintage"])
+                             ,showDetail: false}]);
    var init = {tiles: dummyTiles
               ,isTileDetailView: false
               ,tileDetail: A2($Component$SmartFeedTileDetail.init,
               $Component$SmartFeedTile.init,
               $Common$Alias.emptyFilter)
               ,activeFilterPanel: $Component$ActiveFilterPanel.init($Common$Alias.emptyFilter)
-              ,filter: $Common$Alias.emptyFilter};
+              ,filter: $Common$Alias.emptyFilter
+              ,favouriteTiles: _U.list([])};
    return _elm.Component.SmartFeed.values = {_op: _op
                                             ,init: init
                                             ,update: update

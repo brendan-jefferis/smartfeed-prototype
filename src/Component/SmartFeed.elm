@@ -115,6 +115,7 @@ dummyTiles =
     , palette = { name = Nothing, colours = [{ name = "Grey", hex = "#D3D0CB" }, { name = "Fawn", hex = "#AC9C82" }] }
     , materials = [{name = "Fabric", modifier = Just "Cotton" }, {name = "Metal", modifier = Just "Brass"}, {name = "Wood", modifier = Just "Light"}]
     , styles = ["Scandinavian"]
+    , showDetail = False
     }
   , { tileId = 1
     , brand = "Freedom Furniture"
@@ -127,6 +128,7 @@ dummyTiles =
     , palette = { name = Nothing, colours = [ { name = "Black", hex = "#1A1611" }, { name = "Grey", hex = "#D3D0CB" }, { name = "Burlap", hex = "#ABA49A" }, { name = "White", hex = "#FFFFFF" }, { name = "Brown", hex = "#543822" }, { name = "Fawn", hex = "#AC9C82" }] }
     , materials = [{name = "Fabric", modifier = Just "Cotton" }, {name = "Metal", modifier = Just "Brass"}, {name = "Wood", modifier = Just "Light"}]
     , styles = ["Scandinavian", "Bohemian"]
+    , showDetail = False
     }
   , { tileId = 2
     , brand = "Freedom Furniture"
@@ -139,6 +141,7 @@ dummyTiles =
     , palette = { name = Nothing, colours = [{ name = "Midnight", hex = "#211F20"}, {name = "Slate", hex = "#47464B"}, {name = "Light Cyan", hex = "#7ED3D0"}, {name = "Brick", hex = "#CA3727"}, {name = "Lemon tree", hex = "#E3CD2A"}] }
     , materials = [{name = "Leather", modifier = Nothing}, {name = "Metal", modifier = Just "Brushed"}, {name = "Fabric", modifier = Just "Linen"}, {name = "Wood", modifier = Nothing}]
     , styles = ["Contemporary", "Industrial modern", "Vintage"]
+    , showDetail = False
     }
   ]
 
@@ -150,6 +153,7 @@ type alias Model =
   , tileDetail : TileDetail.Model
   , activeFilterPanel : ActiveFilterPanel.Model 
   , filter : Common.Alias.Filter
+  , favouriteTiles : List Tile.Model
   }
 
 init : Model
@@ -159,6 +163,7 @@ init =
   , tileDetail = TileDetail.init Tile.init Common.Alias.emptyFilter
   , activeFilterPanel = ActiveFilterPanel.init Common.Alias.emptyFilter
   , filter = Common.Alias.emptyFilter
+  , favouriteTiles = []
   }
 
 
@@ -168,8 +173,8 @@ init =
 
 type Action
   = NoOp
+  | TileAction Int Tile.Action
   | TileDetail TileDetail.Action
-  | ShowTileDetail Tile.Model
   | HideTileDetail
   | ActiveFilterPanelActions ActiveFilterPanel.Action
 
@@ -178,6 +183,46 @@ update action model =
   case action of
     NoOp ->
       model
+
+    TileAction id act ->
+      let
+        updateTiles tileModel =
+          if tileModel.tileId == id then
+            Tile.update act tileModel
+          else
+            tileModel
+
+        updatedTiles = List.map updateTiles model.tiles
+        
+        tileToShowDetail =
+          List.filter (\t -> t.showDetail == True) updatedTiles
+          |> List.head
+
+        isTileDetailView =
+          case tileToShowDetail of
+            Just _ ->
+              True
+
+            Nothing ->
+              False
+
+        tileDetail =
+          case tileToShowDetail of
+            Just tile ->
+              TileDetail.init tile model.filter
+
+            Nothing ->
+              TileDetail.init Tile.init Common.Alias.emptyFilter
+
+        favouriteTiles =
+          List.filter (\t -> t.isFavourite == True) updatedTiles
+      in
+        { model |
+            tiles = updatedTiles
+          , isTileDetailView = isTileDetailView
+          , tileDetail = tileDetail
+          , favouriteTiles = favouriteTiles
+        }
 
     TileDetail act ->
       let
@@ -199,20 +244,16 @@ update action model =
           , isTileDetailView = showTileDetail
         }
 
-    ShowTileDetail tile ->
+    HideTileDetail ->
       let
-        tileDetail = TileDetail.init tile model.filter
+        reset tile =
+          { tile | showDetail = False }
       in
         { model |
-            isTileDetailView = True
-          , tileDetail = tileDetail
+            tiles = List.map reset model.tiles
+          , isTileDetailView = False
+          , tileDetail = TileDetail.init Tile.init Common.Alias.emptyFilter
         }
-
-    HideTileDetail ->
-      { model |
-          isTileDetailView = False
-        , tileDetail = TileDetail.init Tile.init Common.Alias.emptyFilter
-      }
 
     ActiveFilterPanelActions act ->
       let
@@ -229,10 +270,8 @@ update action model =
 tileList : Signal.Address Action -> Tile.Model -> Html
 tileList address tile =
   li
-    [ class "tile"
-    , onClick address (ShowTileDetail tile)
-    ]
-    [ Tile.view tile ]
+    [ class "tile" ]
+    [ Tile.view (Signal.forwardTo address (TileAction tile.tileId)) tile ]
 
 view : Signal.Address Action -> Model -> Html
 view address model =
@@ -260,7 +299,7 @@ view address model =
         ]
     , p
       [ id "debug" ]
-      [ text (logFilter model.filter)]
+      [ text (logFilter model.filter ++ (" favouriteTiles: " ++ (toString (List.map .title model.favouriteTiles))) )]
     ]
 
 logFilter : Common.Alias.Filter -> String
